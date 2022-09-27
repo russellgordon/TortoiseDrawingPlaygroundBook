@@ -24,6 +24,11 @@
 		5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 5EF2F97E2054B6E400191409 /* ManifestPlist.strings */; };
 		5EF2F9AE2054BBF300191409 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2F9AD2054BBF300191409 /* LiveViewController.swift */; };
 		5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9B62054E6F900191409 /* Chapters */; };
+		81BF9F6928E3379600E5FE8E /* GridPaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF9F6828E3379600E5FE8E /* GridPaperView.swift */; };
+		81BF9F6B28E337D500E5FE8E /* CanvasScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF9F6A28E337D500E5FE8E /* CanvasScene.swift */; };
+		81BF9F6D28E3381A00E5FE8E /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF9F6C28E3381A00E5FE8E /* Shape.swift */; };
+		81BF9F6F28E3383B00E5FE8E /* Tortoise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF9F6E28E3383B00E5FE8E /* Tortoise.swift */; };
+		81BF9F7D28E33D8000E5FE8E /* cover.png in Resources */ = {isa = PBXBuildFile; fileRef = 81BF9F7B28E33A9800E5FE8E /* cover.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXBuildRule section */
@@ -132,7 +137,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		5E086DC02051C5A7004D8D25 /* PlaygroundBook.playgroundbook */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PlaygroundBook.playgroundbook; sourceTree = BUILT_PRODUCTS_DIR; };
+		5E086DC02051C5A7004D8D25 /* Canvas Sketches.playgroundbook */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Canvas Sketches.playgroundbook"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5E086DC72051DD03004D8D25 /* BookOverridingBuildSettings.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = BookOverridingBuildSettings.xcconfig; sourceTree = "<group>"; };
 		5E086DCD2051DDB8004D8D25 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LiveView.storyboard; sourceTree = "<group>"; };
 		5E086DCF2051DF0F004D8D25 /* Manifest.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Manifest.plist; sourceTree = "<group>"; };
@@ -161,6 +166,11 @@
 		5EF2F9AB2054BBF300191409 /* libBookCore.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libBookCore.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		5EF2F9AD2054BBF300191409 /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		5EF2F9B62054E6F900191409 /* Chapters */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Chapters; sourceTree = "<group>"; };
+		81BF9F6828E3379600E5FE8E /* GridPaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridPaperView.swift; sourceTree = "<group>"; };
+		81BF9F6A28E337D500E5FE8E /* CanvasScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasScene.swift; sourceTree = "<group>"; };
+		81BF9F6C28E3381A00E5FE8E /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
+		81BF9F6E28E3383B00E5FE8E /* Tortoise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tortoise.swift; sourceTree = "<group>"; };
+		81BF9F7B28E33A9800E5FE8E /* cover.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = cover.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -199,7 +209,7 @@
 		5E086DA4204F706E004D8D25 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				5E086DC02051C5A7004D8D25 /* PlaygroundBook.playgroundbook */,
+				5E086DC02051C5A7004D8D25 /* Canvas Sketches.playgroundbook */,
 				5EF2F9AB2054BBF300191409 /* libBookCore.a */,
 				5E6F7E612368FB6A008CC191 /* libBookAPI.a */,
 				5E6F7E742368FF15008CC191 /* libUserModule.a */,
@@ -289,7 +299,6 @@
 		5E70679B23678D810094BDEF /* Modules */ = {
 			isa = PBXGroup;
 			children = (
-				81BF9F6628E3364F00E5FE8E /* CanvasGraphics.playgroundmodule */,
 				5E70679C23678D8A0094BDEF /* BookCore.playgroundmodule */,
 				5E6F7E5A2367B621008CC191 /* BookAPI.playgroundmodule */,
 			);
@@ -307,6 +316,10 @@
 		5E70679D23678DA00094BDEF /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				81BF9F6828E3379600E5FE8E /* GridPaperView.swift */,
+				81BF9F6A28E337D500E5FE8E /* CanvasScene.swift */,
+				81BF9F6C28E3381A00E5FE8E /* Shape.swift */,
+				81BF9F6E28E3383B00E5FE8E /* Tortoise.swift */,
 				5EF2F9AD2054BBF300191409 /* LiveViewController.swift */,
 				5E3196F22061DEA40077BBD7 /* LiveViewSupport.swift */,
 			);
@@ -377,6 +390,7 @@
 		5EF2F9792054B64800191409 /* PrivateResources */ = {
 			isa = PBXGroup;
 			children = (
+				81BF9F7B28E33A9800E5FE8E /* cover.png */,
 				5EF2F97E2054B6E400191409 /* ManifestPlist.strings */,
 				5E086DCC2051DDAE004D8D25 /* LiveView.storyboard */,
 				5E551EC42371FC3F00784365 /* Assets.xcassets */,
@@ -391,21 +405,6 @@
 				5E6F7E582367B51E008CC191 /* UserModules */,
 			);
 			name = "Supporting Content";
-			sourceTree = "<group>";
-		};
-		81BF9F6628E3364F00E5FE8E /* CanvasGraphics.playgroundmodule */ = {
-			isa = PBXGroup;
-			children = (
-				81BF9F6728E336E000E5FE8E /* Sources */,
-			);
-			path = CanvasGraphics.playgroundmodule;
-			sourceTree = "<group>";
-		};
-		81BF9F6728E336E000E5FE8E /* Sources */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			path = Sources;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -428,7 +427,7 @@
 			);
 			name = PlaygroundBook;
 			productName = PlaygroundBook;
-			productReference = 5E086DC02051C5A7004D8D25 /* PlaygroundBook.playgroundbook */;
+			productReference = 5E086DC02051C5A7004D8D25 /* Canvas Sketches.playgroundbook */;
 			productType = "com.apple.product-type.bundle";
 		};
 		5E6F7E602368FB6A008CC191 /* BookAPI */ = {
@@ -509,7 +508,7 @@
 		5E2A7ADD204F611300F4E17A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastSwiftUpdateCheck = 1110;
+				LastSwiftUpdateCheck = 1330;
 				LastUpgradeCheck = 1330;
 				TargetAttributes = {
 					5E086DBF2051C5A7004D8D25 = {
@@ -558,6 +557,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81BF9F7D28E33D8000E5FE8E /* cover.png in Resources */,
 				5EF2F97C2054B6E400191409 /* ManifestPlist.strings in Resources */,
 				5E551EC52371FC3F00784365 /* Assets.xcassets in Resources */,
 				5E086DCA2051DDAE004D8D25 /* LiveView.storyboard in Resources */,
@@ -622,8 +622,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				81BF9F6D28E3381A00E5FE8E /* Shape.swift in Sources */,
 				5E3196F32061DEA40077BBD7 /* LiveViewSupport.swift in Sources */,
+				81BF9F6F28E3383B00E5FE8E /* Tortoise.swift in Sources */,
 				5EF2F9AE2054BBF300191409 /* LiveViewController.swift in Sources */,
+				81BF9F6B28E337D500E5FE8E /* CanvasScene.swift in Sources */,
+				81BF9F6928E3379600E5FE8E /* GridPaperView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
