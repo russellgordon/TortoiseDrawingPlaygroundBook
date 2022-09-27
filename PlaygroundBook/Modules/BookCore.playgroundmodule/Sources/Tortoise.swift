@@ -166,9 +166,19 @@ public struct Tortoise {
 
         
     // Function enabling us to use drawArc() by Anders Randler
+    /**
+     Draw an arc, starting from the current position of the turtle.
+     
+     - Parameters:
+         - radius: The radius of the circle, if the angle for this arc were a full 360 degrees.
+         - angle: How large of an arc to make; 90 degrees is a quarter-circle, 180 is a half-circle, 360 is a full circle, and so on.
+     */
+    public mutating func arc(radius: Double, angle: Double){
+        self.addArc(radius: radius, angle: angle)
+    }
     
     /**
-     Drawn an arc, starting from the current position of the turtle.
+     Draw an arc, starting from the current position of the turtle.
      
      - Parameters:
          - radius: The radius of the circle, if the angle for this arc were a full 360 degrees.
