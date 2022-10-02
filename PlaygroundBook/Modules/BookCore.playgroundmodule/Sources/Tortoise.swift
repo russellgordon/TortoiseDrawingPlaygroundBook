@@ -55,7 +55,7 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-        updateDrawing()
+        updateDrawing(action: "move forward")
 
 
     }
@@ -89,7 +89,7 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-        updateDrawing()
+        updateDrawing(action: "draw a diagonal")
 
     }
     
@@ -207,15 +207,21 @@ public struct Tortoise {
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: true)
         }
-        updateDrawing()
+        updateDrawing(action: "draw an arc")
 
     }
     
-    func updateDrawing() {
+    mutating func startNewDrawing() {
+        self.path = UIBezierPath()
+        updateDrawing(action: "reset drawing")
+    }
+    
+    func updateDrawing(action: String = "line") {
         
+        // A message will only be sent from the turtle inside the page; the Tortoise instance inside GridPaperView won't able to get the live view (this avoids recursion without an exit condition)
         let page = PlaygroundPage.current
         if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
-            proxy.send(.string("Turtle received a command."))
+            proxy.send(.string("Turtle asked to: \(action)."))
         }
         
 //        // Background

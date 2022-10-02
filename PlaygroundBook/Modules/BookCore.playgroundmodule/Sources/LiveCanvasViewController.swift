@@ -57,8 +57,20 @@ public class LiveCanvasViewController: UIViewController {
     public func reply(_ message: String) {
         let currentText = self.responseLabel.text ?? ""
         self.responseLabel.text = "\(currentText)\n\(message)"
-    }
 
+
+        // Reset drawing if we were asked to
+//        if message.contains("reset") {
+//            gridPaper.turtle.startNewDrawing()
+//        }
+        
+        // Draw something using the actual turtle
+        gridPaper.turtle.diagonal(dx: Double.random(in: -100...100), dy: Double.random(in: -100...100))
+        gridPaper.refreshPaths()
+
+        
+    }
+    
 }
 
 extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
@@ -75,8 +87,11 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         
         switch message {
         case let .string(text):
+            
             // A text value all by itself is just part of the conversation.
-            reply("You sent: \(text)")
+            reply("\(text)")
+            
+            
         case let .integer(number):
             reply("You sent me the number \(number)!")
         case let .boolean(boolean):

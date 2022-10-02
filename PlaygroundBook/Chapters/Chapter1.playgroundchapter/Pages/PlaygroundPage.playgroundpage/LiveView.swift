@@ -9,7 +9,10 @@ import UIKit
 import BookCore
 import PlaygroundSupport
 
+// Reference to current playground page
 let page = PlaygroundPage.current
+
+// Make the controller appear as the live view
 page.liveView = LiveCanvasViewController()
 
 //// Instantiate a new instance of the live view from BookCore and pass it to PlaygroundSupport.

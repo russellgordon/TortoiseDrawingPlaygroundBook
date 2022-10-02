@@ -17,6 +17,8 @@ public class GridPaperView : UIView {
     
     let scene = CanvasScene()
     
+    public var turtle = Tortoise()
+    
     public var shouldDrawMainLines: Bool = true {
         didSet {
             setNeedsDisplay()
@@ -74,9 +76,14 @@ public class GridPaperView : UIView {
         self.scene.addChild(self.xAxisLabel)
         self.scene.addChild(self.yAxisLabel)
     }
-    
-    public func add(_ turtle: Tortoise){
-        self.scene.addChild(ShapeSK(turtle:turtle).node)
+        
+    public func refreshPaths() {
+        
+        // Remove old turtle path(s) from scene
+        self.scene.removeAllChildren()
+        
+        // Add current paths back to scene
+        self.scene.addChild(ShapeSK(turtle: self.turtle).node)
     }
     
     required public init?(coder aDecoder: NSCoder) {
