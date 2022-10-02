@@ -39,29 +39,32 @@ public class LiveViewController: UIViewController, PlaygroundLiveViewMessageHand
         self.gridPaper.bindFrameToSuperviewBounds()
     }
 
-    public func add(_ turtle: Tortoise){
-        self.gridPaper.scene.addChild(ShapeSK(turtle:turtle).node)
-    }
+//    public func add(_ turtle: Tortoise){
+//        self.gridPaper.scene.addChild(ShapeSK(turtle:turtle).node)
+//    }
 
     
-    /*
     public func liveViewMessageConnectionOpened() {
         // Implement this method to be notified when the live view message connection is opened.
         // The connection will be opened when the process running Contents.swift starts running and listening for messages.
-    }
-    */
+        print("Process running main.swift has started.")
 
-    /*
+    }
+
     public func liveViewMessageConnectionClosed() {
         // Implement this method to be notified when the live view message connection is closed.
         // The connection will be closed when the process running Contents.swift exits and is no longer listening for messages.
         // This happens when the user's code naturally finishes running, if the user presses Stop, or if there is a crash.
+        print("Crash, stopped, et cetera.")
     }
-    */
 
     public func receive(_ message: PlaygroundValue) {
         // Implement this method to receive messages sent from the process running Contents.swift.
         // This method is *required* by the PlaygroundLiveViewMessageHandler protocol.
         // Use this method to decode any messages sent as PlaygroundValue values and respond accordingly.
+        self.view.backgroundColor = .yellow
+        
+        // Send a message in response.
+        self.send(.string("Greetings from the always-on live view."))
     }
 }

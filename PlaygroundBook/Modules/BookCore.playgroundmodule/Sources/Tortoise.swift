@@ -23,7 +23,7 @@ public struct Tortoise {
     var position = CGPoint(x:0, y:0) {
         didSet {
             self.path.move(to: self.position)
-            updateDrawing()
+//            updateDrawing()
         }
     }
     
@@ -56,7 +56,7 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-        updateDrawing()
+//        updateDrawing()
 
 
     }
@@ -90,7 +90,7 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-        updateDrawing()
+//        updateDrawing()
 
     }
     
@@ -208,22 +208,22 @@ public struct Tortoise {
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: true)
         }
-        updateDrawing()
+//        updateDrawing()
 
     }
     
-    func updateDrawing() {
-        
-        // Background
-        let view = GridPaperView()
-        
-        // Path
-        view.add(self)
-        
-        // Update live view
-        PlaygroundPage.current.liveView = view
-        
-    }
+//    func updateDrawing() {
+//
+//        // Background
+//        let view = GridPaperView()
+//
+//        // Path
+//        view.add(self)
+//
+//        // Update live view
+//        PlaygroundPage.current.liveView = view
+//
+//    }
         
 }
 
