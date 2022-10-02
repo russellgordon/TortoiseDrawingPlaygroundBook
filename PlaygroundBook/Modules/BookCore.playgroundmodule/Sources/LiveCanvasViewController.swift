@@ -61,7 +61,7 @@ public class LiveCanvasViewController: UIViewController {
 
         // Reset drawing if we were asked to
         if message.contains("reset") {
-//            gridPaper.turtle.startNewDrawing()
+            gridPaper.turtle.startNewDrawing()
         } else {
             // Draw something using the actual turtle
             gridPaper.turtle.diagonal(dx: Double.random(in: -100...100), dy: Double.random(in: -100...100))

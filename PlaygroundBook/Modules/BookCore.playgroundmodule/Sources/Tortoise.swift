@@ -213,6 +213,12 @@ public struct Tortoise {
     
     mutating func startNewDrawing() {
         self.path = UIBezierPath()
+        self.penColor = UIColor.blue
+        self.fillColor = UIColor.clear
+        self.lineWidth = 3.0
+        self.heading = 0.0
+        self.drawing = true
+        self.position = CGPoint(x: 0, y: 0)
     }
     
     func updateDrawing(action: String = "line") {
