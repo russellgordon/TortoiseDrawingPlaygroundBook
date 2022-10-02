@@ -23,7 +23,6 @@ public struct Tortoise {
     var position = CGPoint(x:0, y:0) {
         didSet {
             self.path.move(to: self.position)
-//            updateDrawing()
         }
     }
     
@@ -56,7 +55,7 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-//        updateDrawing()
+        updateDrawing()
 
 
     }
@@ -90,7 +89,7 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-//        updateDrawing()
+        updateDrawing()
 
     }
     
@@ -208,12 +207,17 @@ public struct Tortoise {
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: true)
         }
-//        updateDrawing()
+        updateDrawing()
 
     }
     
-//    func updateDrawing() {
-//
+    func updateDrawing() {
+        
+        let page = PlaygroundPage.current
+        if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
+            proxy.send(.string("Turtle received a command."))
+        }
+        
 //        // Background
 //        let view = GridPaperView()
 //
@@ -222,8 +226,8 @@ public struct Tortoise {
 //
 //        // Update live view
 //        PlaygroundPage.current.liveView = view
-//
-//    }
+
+    }
         
 }
 

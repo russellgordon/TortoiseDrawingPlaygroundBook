@@ -10,7 +10,7 @@ import PlaygroundSupport
 
 public class LiveCanvasViewController: UIViewController {
     
-    var gridPaper: GridPaperView!
+    public var gridPaper: GridPaperView!
     var responseLabel: UILabel!
     
     override public func viewDidLoad() {
