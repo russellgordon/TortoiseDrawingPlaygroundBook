@@ -37,9 +37,6 @@ public class LiveCanvasViewController: UIViewController {
         self.view.addSubview(gridPaper)
         gridPaper.bindFrameToSuperviewBounds()
         
-        // Show debug messages received from live view
-        debugMode = true
-
     }
     
     override public func viewDidAppear(_ animated: Bool) {
@@ -108,16 +105,18 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             
             switch command {
             case "setLineWidth":
-                if case let .floatingPoint(newLineWidth)? = dictionary["to"] {
+                if case let .floatingPoint(oldLineWidth)? = dictionary["from"],
+                case let .floatingPoint(newLineWidth)? = dictionary["to"] {
                     gridPaper.turtle.lineWidth = newLineWidth
-                    reply("'lineWidth' command received with line width: \(newLineWidth)")
+                    reply("'setLineWidth' command received, line width was: \(oldLineWidth) but is now \(newLineWidth)")
                 } else {
                     reply("'setLineWidth' command received, but no new line width was provided.")
                 }
             case "setHeading":
-                if case let .floatingPoint(newHeading)? = dictionary["to"] {
+                if case let .floatingPoint(oldHeading)? = dictionary["from"],
+                   case let .floatingPoint(newHeading)? = dictionary["to"] {
                     gridPaper.turtle.heading = newHeading
-                    reply("'setHeading' command received with heading: \(newHeading)")
+                    reply("'setHeading' command received, heading was: \(oldHeading) but is now \(newHeading)")
                 } else {
                     reply("'setHeading' command received, but no heading was provided.")
                 }
@@ -136,13 +135,6 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                 } else {
                     reply("'diagonal' command received, but either dx or dy was not provided.")
                 }
-            case "left":
-                if case let .floatingPoint(angle)? = dictionary["dx"] {
-                    gridPaper.turtle.left(angleInDegrees: angle)
-                    reply("'left' command received with angle: \(angle)")
-                } else {
-                    reply("'left' command received, but no angle was provided.")
-                }
             case "penUp":
                 gridPaper.turtle.penUp()
                 reply("'penUp' command received.")
@@ -159,8 +151,11 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                 }
             case "startNewDrawing":
                 gridPaper.turtle.startNewDrawing()
-                self.responseLabel.text = "Appeared"
-                reply("'startNewDrawing' command received.")
+                self.debugMode = false
+                self.responseLabel.text = ""
+            case "toggleDebugMode":
+                reply("'toggleDebugMode' command received. Debug mode is now: \(!self.debugMode)")
+                self.debugMode.toggle()
             default:
                 // We received a command we didn't recognize. Let's mention that.
                 reply("Hmm. I don't recognize the command \"\(command)\".")

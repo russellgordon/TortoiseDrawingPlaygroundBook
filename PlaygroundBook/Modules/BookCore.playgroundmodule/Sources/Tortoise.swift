@@ -27,6 +27,7 @@ public struct Tortoise {
             // Set new line width
             messageToLiveView(action: PlaygroundValue.dictionary([
                 "Command": .string("setLineWidth"),
+                "from": .floatingPoint(Double(oldValue)),
                 "to": .floatingPoint(Double(lineWidth))
             ]))
             
@@ -38,6 +39,7 @@ public struct Tortoise {
             // Set new heading
             messageToLiveView(action: PlaygroundValue.dictionary([
                 "Command": .string("setHeading"),
+                "from": .floatingPoint(oldValue),
                 "to": .floatingPoint(heading)
             ]))
 
@@ -147,14 +149,9 @@ public struct Tortoise {
          - angle: How far to rotate the turtle to the left, in degrees.
      */
     public mutating func left(angleInDegrees angle: Double){
+
         self.heading = self.heading + angle
         
-        // Send command to turn left
-        messageToLiveView(action: PlaygroundValue.dictionary([
-            "Command": .string("left"),
-            "angle": .floatingPoint(angle)
-        ]))
-
     }
     
     /**
@@ -200,6 +197,16 @@ public struct Tortoise {
     /// The current heading of the turtle on the Cartesian plane, in degrees.
     public func currentHeading() -> Double {
         return self.heading
+    }
+    
+    /// See developer debug mode messages
+    public func toggleDebugMode() {
+        
+        // Send command to enable/disable debug mode messages
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("toggleDebugMode")
+        ]))
+
     }
     
 //    /**
