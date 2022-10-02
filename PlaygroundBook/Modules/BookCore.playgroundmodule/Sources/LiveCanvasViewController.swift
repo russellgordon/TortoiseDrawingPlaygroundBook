@@ -23,9 +23,9 @@ public class LiveCanvasViewController: UIViewController {
                 
         // Add response label to the grid
         responseLabel = UILabel()
-        responseLabel.textAlignment = .center
+        responseLabel.textAlignment = .left
         responseLabel.translatesAutoresizingMaskIntoConstraints = true
-        responseLabel.font = UIFont.boldSystemFont(ofSize: 30)
+        responseLabel.font = UIFont.systemFont(ofSize: 12)
         responseLabel.adjustsFontSizeToFitWidth = true
         responseLabel.numberOfLines = 0
         gridPaper.addSubview(responseLabel)
@@ -47,7 +47,7 @@ public class LiveCanvasViewController: UIViewController {
 
         // Center the response label
         responseLabel.bounds = view.bounds
-        responseLabel.center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
+        responseLabel.center = CGPoint(x: view.bounds.midX + 50, y: view.bounds.midY)
         
     }
     
