@@ -213,7 +213,6 @@ public struct Tortoise {
     
     mutating func startNewDrawing() {
         self.path = UIBezierPath()
-        updateDrawing(action: "reset drawing")
     }
     
     func updateDrawing(action: String = "line") {

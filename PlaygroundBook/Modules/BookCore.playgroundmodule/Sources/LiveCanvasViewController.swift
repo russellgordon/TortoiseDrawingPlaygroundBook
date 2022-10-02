@@ -60,15 +60,14 @@ public class LiveCanvasViewController: UIViewController {
 
 
         // Reset drawing if we were asked to
-//        if message.contains("reset") {
+        if message.contains("reset") {
 //            gridPaper.turtle.startNewDrawing()
-//        }
-        
-        // Draw something using the actual turtle
-        gridPaper.turtle.diagonal(dx: Double.random(in: -100...100), dy: Double.random(in: -100...100))
+        } else {
+            // Draw something using the actual turtle
+            gridPaper.turtle.diagonal(dx: Double.random(in: -100...100), dy: Double.random(in: -100...100))
+        }
         gridPaper.refreshPaths()
 
-        
     }
     
 }
@@ -90,7 +89,6 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             
             // A text value all by itself is just part of the conversation.
             reply("\(text)")
-            
             
         case let .integer(number):
             reply("You sent me the number \(number)!")
