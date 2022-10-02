@@ -24,6 +24,7 @@
 		5EF2F9AE2054BBF300191409 /* LiveViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5EF2F9AD2054BBF300191409 /* LiveViewController.swift */; };
 		5EF2F9B72054E6FB00191409 /* Chapters in Copy Book Contents */ = {isa = PBXBuildFile; fileRef = 5EF2F9B62054E6F900191409 /* Chapters */; };
 		81ABBB7B28E771AB00E72AE7 /* TestViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ABBB7A28E771AB00E72AE7 /* TestViewController.swift */; };
+		81ABBB7D28E9E3D100E72AE7 /* LiveCanvasViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81ABBB7C28E9E3D100E72AE7 /* LiveCanvasViewController.swift */; };
 		81BF9F6928E3379600E5FE8E /* GridPaperView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF9F6828E3379600E5FE8E /* GridPaperView.swift */; };
 		81BF9F6B28E337D500E5FE8E /* CanvasScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF9F6A28E337D500E5FE8E /* CanvasScene.swift */; };
 		81BF9F6D28E3381A00E5FE8E /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81BF9F6C28E3381A00E5FE8E /* Shape.swift */; };
@@ -166,6 +167,7 @@
 		5EF2F9AD2054BBF300191409 /* LiveViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveViewController.swift; sourceTree = "<group>"; };
 		5EF2F9B62054E6F900191409 /* Chapters */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Chapters; sourceTree = "<group>"; };
 		81ABBB7A28E771AB00E72AE7 /* TestViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestViewController.swift; sourceTree = "<group>"; };
+		81ABBB7C28E9E3D100E72AE7 /* LiveCanvasViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LiveCanvasViewController.swift; sourceTree = "<group>"; };
 		81BF9F6828E3379600E5FE8E /* GridPaperView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GridPaperView.swift; sourceTree = "<group>"; };
 		81BF9F6A28E337D500E5FE8E /* CanvasScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CanvasScene.swift; sourceTree = "<group>"; };
 		81BF9F6C28E3381A00E5FE8E /* Shape.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Shape.swift; sourceTree = "<group>"; };
@@ -322,6 +324,7 @@
 				5EF2F9AD2054BBF300191409 /* LiveViewController.swift */,
 				5E3196F22061DEA40077BBD7 /* LiveViewSupport.swift */,
 				81ABBB7A28E771AB00E72AE7 /* TestViewController.swift */,
+				81ABBB7C28E9E3D100E72AE7 /* LiveCanvasViewController.swift */,
 			);
 			path = Sources;
 			sourceTree = "<group>";
@@ -601,6 +604,7 @@
 				81BF9F6D28E3381A00E5FE8E /* Shape.swift in Sources */,
 				5E3196F32061DEA40077BBD7 /* LiveViewSupport.swift in Sources */,
 				81BF9F6F28E3383B00E5FE8E /* Tortoise.swift in Sources */,
+				81ABBB7D28E9E3D100E72AE7 /* LiveCanvasViewController.swift in Sources */,
 				5EF2F9AE2054BBF300191409 /* LiveViewController.swift in Sources */,
 				81BF9F6B28E337D500E5FE8E /* CanvasScene.swift in Sources */,
 				81BF9F6928E3379600E5FE8E /* GridPaperView.swift in Sources */,
