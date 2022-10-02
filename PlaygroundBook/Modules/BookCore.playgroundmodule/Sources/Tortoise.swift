@@ -10,6 +10,14 @@
 import PlaygroundSupport
 import SpriteKit
 
+public typealias Degrees = Double
+
+public extension Degrees {
+    func asRadians() -> Double {
+        return self * Double.pi / 180
+    }
+}
+
 public enum Role {
     case sender
     case receiver
@@ -209,22 +217,21 @@ public struct Tortoise {
 
     }
     
-//    /**
-//     Draw a triangle representing the turtle. The forward vertex of the triangle indicates the position of the turtle. The rear portion of the triangle indicates the heading of the turtle. For example, a triangle pointing to the right means the turtle has a heading of 0 degrees.
-//     */
-//    public mutating func drawSelf() {
-//
-//        self.penColor = UIColor.black
-//        self.fillColor = UIColor.black
-//        self.lineWidth = 1.0
-//        self.path.addLine(to: CGPoint(x: self.position.x - 10, y: self.position.y + 5))
-//        self.path.addLine(to: CGPoint(x: self.position.x, y: self.position.y - 10))
-//        self.path.addLine(to: CGPoint(x: self.position.x + 10, y: self.position.y + 5))
-//        self.penColor = UIColor.blue
-//        self.fillColor = UIColor.clear
-//        self.lineWidth = 3.0
-//
-//    }
+    /**
+     Draw a triangle representing the turtle. The forward vertex of the triangle indicates the position of the turtle. The rear portion of the triangle indicates the heading of the turtle. For example, a triangle pointing to the right means the turtle has a heading of 0 degrees.
+     */
+    public mutating func drawSelf() {
+
+        left(angleInDegrees: 150)
+        forward(distance: 15)
+        left(angleInDegrees: 120)
+        let forwardMovement = 2.0 * 15.0 * tan(Degrees(30.0).asRadians()) * 0.866
+        forward(distance: forwardMovement)
+        left(angleInDegrees: 120)
+        forward(distance: 15)
+        right(angleInDegrees: 30)
+
+    }
 
         
     // Function enabling us to use drawArc() by Anders Randler
