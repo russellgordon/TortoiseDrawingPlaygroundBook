@@ -17,7 +17,7 @@ public class GridPaperView : UIView {
     
     let scene = CanvasScene()
     
-    public var turtle = Tortoise()
+    public var turtle = Tortoise(role: .receiver)
     
     public var shouldDrawMainLines: Bool = true {
         didSet {

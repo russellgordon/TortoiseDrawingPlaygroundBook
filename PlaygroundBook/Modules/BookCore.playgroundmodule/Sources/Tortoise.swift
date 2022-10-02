@@ -10,16 +10,41 @@
 import PlaygroundSupport
 import SpriteKit
 
+public enum Role {
+    case sender
+    case receiver
+}
+
 public struct Tortoise {
 
     // MARK: Stored Properties
     public var path = UIBezierPath()
     var penColor = UIColor.blue
     var fillColor = UIColor.clear
-    public var lineWidth: CGFloat = 3.0
-    public var heading: Double = 0.0
+    public var lineWidth: CGFloat = 3.0 {
+        didSet {
+            
+            // Send command to update the drawing in the live view
+            updateDrawing(action: PlaygroundValue.dictionary([
+                "Command": .string("setLineWidth"),
+                "to": .floatingPoint(Double(lineWidth))
+            ]))
+            
+        }
+    }
+    public var heading: Double = 0.0 {
+        didSet {
+            
+            // Send command to update the drawing in the live view
+            updateDrawing(action: PlaygroundValue.dictionary([
+                "Command": .string("setHeading"),
+                "to": .floatingPoint(heading)
+            ]))
+
+        }
+    }
     var drawing = true
-    
+    var role: Role
     var position = CGPoint(x:0, y:0) {
         didSet {
             self.path.move(to: self.position)
@@ -27,7 +52,8 @@ public struct Tortoise {
     }
     
     // MARK: Initializers
-    public init(){
+    public init(role: Role = .sender) {
+        self.role = role
         defer {
             self.position = CGPoint(x: 0, y: 0)
         }
@@ -55,8 +81,12 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-        updateDrawing(action: "move forward")
-
+        
+        // Send command to update the drawing in the live view
+        updateDrawing(action: PlaygroundValue.dictionary([
+            "Command": .string("forward"),
+            "distance": .floatingPoint(distance)
+        ]))
 
     }
     
@@ -80,6 +110,7 @@ public struct Tortoise {
          - dy: Desired vertical change in position, relative to the turtle's current position.
      */
     public func diagonal(dx: Double, dy: Double){
+        
         let currentX = Double(self.path.currentPoint.x)
         let currentY = Double(self.path.currentPoint.y)
         
@@ -89,8 +120,14 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-        updateDrawing(action: "draw a diagonal")
-
+        
+        // Send command to update the drawing in the live view
+        updateDrawing(action: PlaygroundValue.dictionary([
+            "Command": .string("diagonal"),
+            "dx": .floatingPoint(dx),
+            "dy": .floatingPoint(dy)
+        ]))
+        
     }
     
     /**
@@ -111,6 +148,13 @@ public struct Tortoise {
      */
     public mutating func left(angleInDegrees angle: Double){
         self.heading = self.heading + angle
+        
+        // Send command to update the drawing in the live view
+        updateDrawing(action: PlaygroundValue.dictionary([
+            "Command": .string("left"),
+            "angle": .floatingPoint(angle)
+        ]))
+
     }
     
     /**
@@ -118,6 +162,12 @@ public struct Tortoise {
      */
     public mutating func penUp() {
         self.drawing = false
+        
+        // Send command to update the drawing in the live view
+        updateDrawing(action: PlaygroundValue.dictionary([
+            "Command": .string("penUp")
+        ]))
+
     }
     
     /**
@@ -125,6 +175,12 @@ public struct Tortoise {
      */
     public mutating func penDown() {
         self.drawing = true
+
+        // Send command to update the drawing in the live view
+        updateDrawing(action: PlaygroundValue.dictionary([
+            "Command": .string("penDown")
+        ]))
+
     }
     
     /// Whether the pen is currently down, or not.
@@ -207,7 +263,13 @@ public struct Tortoise {
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: true)
         }
-        updateDrawing(action: "draw an arc")
+        
+        // Send command to update the drawing in the live view
+        updateDrawing(action: PlaygroundValue.dictionary([
+            "Command": .string("arc"),
+            "radius": .floatingPoint(radius),
+            "angle": .floatingPoint(angle)
+        ]))
 
     }
     
@@ -219,24 +281,23 @@ public struct Tortoise {
         self.heading = 0.0
         self.drawing = true
         self.position = CGPoint(x: 0, y: 0)
+        
+        // Send command to update the drawing in the live view
+        updateDrawing(action: PlaygroundValue.dictionary([
+            "Command": .string("startNewDrawing")
+        ]))
+
     }
     
-    func updateDrawing(action: String = "line") {
+    func updateDrawing(action: PlaygroundValue) {
         
-        // A message will only be sent from the turtle inside the page; the Tortoise instance inside GridPaperView won't able to get the live view (this avoids recursion without an exit condition)
-        let page = PlaygroundPage.current
-        if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
-            proxy.send(.string("Turtle asked to: \(action)."))
+        if self.role == .sender {
+            // Send a message to the live view so the embedded Tortoise instance actually draws what was requested
+            let page = PlaygroundPage.current
+            if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
+                proxy.send(action)
+            }
         }
-        
-//        // Background
-//        let view = GridPaperView()
-//
-//        // Path
-//        view.add(self)
-//
-//        // Update live view
-//        PlaygroundPage.current.liveView = view
 
     }
         
