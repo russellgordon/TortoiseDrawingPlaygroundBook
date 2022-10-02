@@ -24,8 +24,8 @@ public struct Tortoise {
     public var lineWidth: CGFloat = 3.0 {
         didSet {
             
-            // Send command to update the drawing in the live view
-            updateDrawing(action: PlaygroundValue.dictionary([
+            // Set new line width
+            messageToLiveView(action: PlaygroundValue.dictionary([
                 "Command": .string("setLineWidth"),
                 "to": .floatingPoint(Double(lineWidth))
             ]))
@@ -35,8 +35,8 @@ public struct Tortoise {
     public var heading: Double = 0.0 {
         didSet {
             
-            // Send command to update the drawing in the live view
-            updateDrawing(action: PlaygroundValue.dictionary([
+            // Set new heading
+            messageToLiveView(action: PlaygroundValue.dictionary([
                 "Command": .string("setHeading"),
                 "to": .floatingPoint(heading)
             ]))
@@ -82,8 +82,8 @@ public struct Tortoise {
         }
         self.path.stroke()
         
-        // Send command to update the drawing in the live view
-        updateDrawing(action: PlaygroundValue.dictionary([
+        // Send command to move turtle forward
+        messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("forward"),
             "distance": .floatingPoint(distance)
         ]))
@@ -121,8 +121,8 @@ public struct Tortoise {
         }
         self.path.stroke()
         
-        // Send command to update the drawing in the live view
-        updateDrawing(action: PlaygroundValue.dictionary([
+        // Send command to draw a diagonal line
+        messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("diagonal"),
             "dx": .floatingPoint(dx),
             "dy": .floatingPoint(dy)
@@ -149,8 +149,8 @@ public struct Tortoise {
     public mutating func left(angleInDegrees angle: Double){
         self.heading = self.heading + angle
         
-        // Send command to update the drawing in the live view
-        updateDrawing(action: PlaygroundValue.dictionary([
+        // Send command to turn left
+        messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("left"),
             "angle": .floatingPoint(angle)
         ]))
@@ -163,8 +163,8 @@ public struct Tortoise {
     public mutating func penUp() {
         self.drawing = false
         
-        // Send command to update the drawing in the live view
-        updateDrawing(action: PlaygroundValue.dictionary([
+        // Send command to pick up the pen
+        messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("penUp")
         ]))
 
@@ -176,8 +176,8 @@ public struct Tortoise {
     public mutating func penDown() {
         self.drawing = true
 
-        // Send command to update the drawing in the live view
-        updateDrawing(action: PlaygroundValue.dictionary([
+        // Send command to put the pen down
+        messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("penDown")
         ]))
 
@@ -265,7 +265,7 @@ public struct Tortoise {
         }
         
         // Send command to update the drawing in the live view
-        updateDrawing(action: PlaygroundValue.dictionary([
+        messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("arc"),
             "radius": .floatingPoint(radius),
             "angle": .floatingPoint(angle)
@@ -282,14 +282,15 @@ public struct Tortoise {
         self.drawing = true
         self.position = CGPoint(x: 0, y: 0)
         
-        // Send command to update the drawing in the live view
-        updateDrawing(action: PlaygroundValue.dictionary([
+        // Send command to start a new drawing
+        messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("startNewDrawing")
         ]))
 
     }
     
-    func updateDrawing(action: PlaygroundValue) {
+    // When this is the Tortoise instance in the playground page, send messages to the Tortoise instance contained in the live view (LiveCanvasViewController)
+    func messageToLiveView(action: PlaygroundValue) {
         
         if self.role == .sender {
             // Send a message to the live view so the embedded Tortoise instance actually draws what was requested

@@ -10,6 +10,9 @@ import PlaygroundSupport
 
 public class LiveCanvasViewController: UIViewController {
     
+    // Whether to show messages received from the live view
+    var debugMode = false
+
     public var gridPaper: GridPaperView!
     var responseLabel: UILabel!
     
@@ -33,13 +36,18 @@ public class LiveCanvasViewController: UIViewController {
         // Make the grid visible as a subview
         self.view.addSubview(gridPaper)
         gridPaper.bindFrameToSuperviewBounds()
+        
+        // Show debug messages received from live view
+        debugMode = true
 
     }
     
     override public func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        responseLabel.text = "Appeared"
+        if debugMode {
+            responseLabel.text = "Appeared"
+        }
     }
     
     override public func viewDidLayoutSubviews() {
@@ -51,22 +59,13 @@ public class LiveCanvasViewController: UIViewController {
         
     }
     
-    // Add functions below to communicate with Tortoise class to draw items on the grid...
-    
     /// Immediately appends new text to the label.
     public func reply(_ message: String) {
-        let currentText = self.responseLabel.text ?? ""
-        self.responseLabel.text = "\(currentText)\n\(message)"
-
-
-        // Reset drawing if we were asked to
-        if message.contains("reset") {
-            gridPaper.turtle.startNewDrawing()
-        } else {
-            // Draw something using the actual turtle
-            gridPaper.turtle.diagonal(dx: Double.random(in: -100...100), dy: Double.random(in: -100...100))
+        
+        if debugMode {
+            let currentText = self.responseLabel.text ?? ""
+            self.responseLabel.text = "\(currentText)\n\(message)"
         }
-        gridPaper.refreshPaths()
 
     }
     
@@ -86,10 +85,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         
         switch message {
         case let .string(text):
-            
-            // A text value all by itself is just part of the conversation.
-            reply("\(text)")
-            
+            reply("You sent this text: \(text)")
         case let .integer(number):
             reply("You sent me the number \(number)!")
         case let .boolean(boolean):
@@ -103,6 +99,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         case .array:
             reply("Hmm. I don't know what to do with an array.")
         case let .dictionary(dictionary):
+            
             guard case let .string(command)? = dictionary["Command"] else {
                 // We received a dictionary without a "Command" key.
                 reply("Hmm. I was sent a dictionary, but it was missing a \"Command\".")
@@ -110,18 +107,68 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             }
             
             switch command {
-            case "Echo":
-                if case let .string(message)? = dictionary["Message"] {
-                    reply(message)
+            case "setLineWidth":
+                if case let .floatingPoint(newLineWidth)? = dictionary["to"] {
+                    gridPaper.turtle.lineWidth = newLineWidth
+                    reply("'lineWidth' command received with line width: \(newLineWidth)")
+                } else {
+                    reply("'setLineWidth' command received, but no new line width was provided.")
                 }
-                else {
-                    // We didn't have a message string in the dictionary.
-                    reply("Hmm. I was told to \"Echo\" but there was no \"Message\".")
+            case "setHeading":
+                if case let .floatingPoint(newHeading)? = dictionary["to"] {
+                    gridPaper.turtle.heading = newHeading
+                    reply("'setHeading' command received with heading: \(newHeading)")
+                } else {
+                    reply("'setHeading' command received, but no heading was provided.")
                 }
+            case "forward":
+                if case let .floatingPoint(distance)? = dictionary["distance"] {
+                    gridPaper.turtle.forward(distance: distance)
+                    reply("'forward' command received with distance: \(distance)")
+                } else {
+                    reply("'forward' command received, but no distance was provided.")
+                }
+            case "diagonal":
+                if case let .floatingPoint(dx)? = dictionary["dx"],
+                   case let .floatingPoint(dy)? = dictionary["dy"] {
+                    gridPaper.turtle.diagonal(dx: dx, dy: dy)
+                    reply("'diagonal' command received with dx: \(dx), dy: \(dy)")
+                } else {
+                    reply("'diagonal' command received, but either dx or dy was not provided.")
+                }
+            case "left":
+                if case let .floatingPoint(angle)? = dictionary["dx"] {
+                    gridPaper.turtle.left(angleInDegrees: angle)
+                    reply("'left' command received with angle: \(angle)")
+                } else {
+                    reply("'left' command received, but no angle was provided.")
+                }
+            case "penUp":
+                gridPaper.turtle.penUp()
+                reply("'penUp' command received.")
+            case "penDown":
+                gridPaper.turtle.penDown()
+                reply("'penDown' command received.")
+            case "arc":
+                if case let .floatingPoint(radius)? = dictionary["radius"],
+                   case let .floatingPoint(angle)? = dictionary["angle"] {
+                    gridPaper.turtle.arc(radius: radius, angle: angle)
+                    reply("'arc' or 'addArc' command received with radius: \(radius), angle: \(angle)")
+                } else {
+                    reply("'arc or addArc' command received, but either radius or angle was not provided.")
+                }
+            case "startNewDrawing":
+                gridPaper.turtle.startNewDrawing()
+                self.responseLabel.text = "Appeared"
+                reply("'startNewDrawing' command received.")
             default:
                 // We received a command we didn't recognize. Let's mention that.
                 reply("Hmm. I don't recognize the command \"\(command)\".")
             }
+
+            // Update the drawing (remove old paths, add new ones)
+            gridPaper.refreshPaths()
+
         }
     }
     

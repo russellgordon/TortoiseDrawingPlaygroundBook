@@ -7,10 +7,13 @@ import SpriteKit
 //#-end-hidden-code
 var turtle = Tortoise()
 //#-hidden-code
-// Reset the drawing
+// Start a new drawing
 let page = PlaygroundPage.current
 if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
-    proxy.send(.string("Turtle asked to: reset drawing."))
+    let action = PlaygroundValue.dictionary([
+        "Command": .string("startNewDrawing")
+    ])
+    proxy.send(action)
 }
 //#-end-hidden-code
 /*:
