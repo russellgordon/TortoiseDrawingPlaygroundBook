@@ -198,12 +198,26 @@ public struct Tortoise {
     /// The current position of the turtle on the Cartesian plane, relative to the origin.
     public func currentPosition() -> CGPoint {
         let position = self.path.currentPoint
-        
+
+        // Send command to report current position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("reportCurrentPosition"),
+            "x": .floatingPoint(position.x),
+            "y": .floatingPoint(position.y)
+        ]))
+
         return position
     }
 
     /// The current heading of the turtle on the Cartesian plane, in degrees.
     public func currentHeading() -> Double {
+        
+        // Send command to report current heading
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("reportCurrentHeading"),
+            "heading": .floatingPoint(self.heading)
+        ]))
+
         return self.heading
     }
     

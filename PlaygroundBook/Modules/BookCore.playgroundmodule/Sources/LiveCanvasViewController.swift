@@ -142,6 +142,19 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             case "penDown":
                 gridPaper.turtle.penDown()
                 reply("'penDown' command received.")
+            case "reportCurrentPosition":
+                if case let .floatingPoint(x)? = dictionary["x"],
+                   case let .floatingPoint(y)? = dictionary["y"] {
+                    reply("'reportCurrentPosition' command received, position is: (\(x), \(y))")
+                } else {
+                    reply("'reportCurrentPosition' command received, but either x or y value was not provided.")
+                }
+            case "reportCurrentHeading":
+                if case let .floatingPoint(heading)? = dictionary["heading"] {
+                    reply("'reportCurrentHeading' command received, heading is: \(heading)")
+                } else {
+                    reply("'reportCurrentPosition' command received, but heading was not provided.")
+                }
             case "arc":
                 if case let .floatingPoint(radius)? = dictionary["radius"],
                    case let .floatingPoint(angle)? = dictionary["angle"] {
