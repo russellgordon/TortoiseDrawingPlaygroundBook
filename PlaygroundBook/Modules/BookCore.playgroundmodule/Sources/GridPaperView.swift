@@ -109,7 +109,7 @@ public class GridPaperView : UIView {
             // Restore current state of turtle
             self.turtle.position = currentDrawing.position
             self.turtle.path = currentDrawing.path
-//            self.turtle.path.move(to: self.turtle.position)
+            self.turtle.path.move(to: self.turtle.position)
             self.turtle.fillColor = currentDrawing.fillColor
             self.turtle.penColor = currentDrawing.strokeColor
             self.turtle.lineWidth = currentDrawing.lineWidth

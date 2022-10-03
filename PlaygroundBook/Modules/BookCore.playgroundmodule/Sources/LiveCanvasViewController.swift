@@ -182,7 +182,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     
                     // Save the current drawing
                     let finishedDrawing = Drawing(path: gridPaper.turtle.path,
-                                                  position: gridPaper.turtle.currentPosition(),
+                                                  position: gridPaper.turtle.position,
                                                   fillColor: gridPaper.turtle.fillColor,
                                                   strokeColor: gridPaper.turtle.penColor,
                                                   lineWidth: gridPaper.turtle.lineWidth)
@@ -223,7 +223,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     
                     // Save the current drawing
                     let finishedDrawing = Drawing(path: gridPaper.turtle.path,
-                                                  position: gridPaper.turtle.currentPosition(),
+                                                  position: gridPaper.turtle.position,
                                                   fillColor: gridPaper.turtle.fillColor,
                                                   strokeColor: gridPaper.turtle.penColor,
                                                   lineWidth: gridPaper.turtle.lineWidth)
