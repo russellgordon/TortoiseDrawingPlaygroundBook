@@ -170,6 +170,17 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             case "toggleDebugMode":
                 reply("'toggleDebugMode' command received. Debug mode is now: \(!self.debugMode)")
                 self.debugMode.toggle()
+            case "setPenColor":
+                if case let .floatingPoint(red)? = dictionary["red"],
+                   case let .floatingPoint(green)? = dictionary["green"],
+                   case let .floatingPoint(blue)? = dictionary["blue"],
+                   case let .floatingPoint(alpha)? = dictionary["alpha"] {
+                    gridPaper.turtle.penColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    reply("'setPenColor' command received.")
+                } else {
+                    reply("'reportCurrentPosition' command received, but one of the RGBA channels was not provided.")
+                }
+
             default:
                 // We received a command we didn't recognize. Let's mention that.
                 reply("Hmm. I don't recognize the command \"\(command)\".")

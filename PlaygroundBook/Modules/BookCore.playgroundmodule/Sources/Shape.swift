@@ -14,7 +14,7 @@ public struct ShapeSK {
         self.node.path = turtle.path.cgPath
         self.node.position = turtle.position
         self.node.fillColor = turtle.fillColor
-        self.node.strokeColor = UIColor.blue
+        self.node.strokeColor = turtle.penColor
         self.node.lineWidth = turtle.lineWidth
     }
 }

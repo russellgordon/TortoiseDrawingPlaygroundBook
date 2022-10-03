@@ -27,8 +27,28 @@ public struct Tortoise {
 
     // MARK: Stored Properties
     public var path = UIBezierPath()
-    var penColor = UIColor.blue
-    var fillColor = UIColor.red
+    public var penColor = UIColor.blue {
+        didSet {
+            
+            // SEE: https://www.hackingwithswift.com/example-code/uicolor/how-to-read-the-red-green-blue-and-alpha-color-components-from-a-uicolor
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            var alpha: CGFloat = 0
+            penColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            
+            // Send message to set new pen color
+            messageToLiveView(action: PlaygroundValue.dictionary([
+                "Command": .string("setPenColor"),
+                "red": .floatingPoint(red),
+                "green": .floatingPoint(green),
+                "blue": .floatingPoint(blue),
+                "alpha": .floatingPoint(alpha)
+            ]))
+
+        }
+    }
+    var fillColor = UIColor.clear
     public var lineWidth: CGFloat = 3.0 {
         didSet {
             
@@ -308,7 +328,7 @@ public struct Tortoise {
     mutating func startNewDrawing() {
         self.path = UIBezierPath()
         self.penColor = UIColor.blue
-        self.fillColor = UIColor.red
+        self.fillColor = UIColor.clear
         self.lineWidth = 3.0
         self.heading = 0.0
         self.drawing = true
