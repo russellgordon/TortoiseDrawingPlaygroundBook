@@ -28,7 +28,7 @@ public struct Tortoise {
     // MARK: Stored Properties
     public var path = UIBezierPath()
     var penColor = UIColor.blue
-    var fillColor = UIColor.clear
+    var fillColor = UIColor.red
     public var lineWidth: CGFloat = 3.0 {
         didSet {
             
@@ -91,7 +91,8 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
-        
+        self.path.fill()
+
         // Send command to move turtle forward
         messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("forward"),
@@ -130,6 +131,7 @@ public struct Tortoise {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
         self.path.stroke()
+        self.path.fill()
         
         // Send command to draw a diagonal line
         messageToLiveView(action: PlaygroundValue.dictionary([
@@ -280,6 +282,7 @@ public struct Tortoise {
             let endAngle = (90 + heading + angle) * (.pi / 180)
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: false)
+            self.path.fill()
         } else {
             let toCenterInRadians = (90 + heading) * (.pi / 180)
             let dx = radius * cos(toCenterInRadians)
@@ -290,6 +293,7 @@ public struct Tortoise {
             let endAngle = (-90 + heading + angle) * (.pi / 180)
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: true)
+            self.path.fill()
         }
         
         // Send command to update the drawing in the live view
@@ -304,7 +308,7 @@ public struct Tortoise {
     mutating func startNewDrawing() {
         self.path = UIBezierPath()
         self.penColor = UIColor.blue
-        self.fillColor = UIColor.clear
+        self.fillColor = UIColor.red
         self.lineWidth = 3.0
         self.heading = 0.0
         self.drawing = true

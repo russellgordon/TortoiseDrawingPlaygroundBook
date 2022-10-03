@@ -13,7 +13,7 @@ public struct ShapeSK {
     public init(turtle: Tortoise){
         self.node.path = turtle.path.cgPath
         self.node.position = turtle.position
-        self.node.fillColor = UIColor.clear
+        self.node.fillColor = turtle.fillColor
         self.node.strokeColor = UIColor.blue
         self.node.lineWidth = turtle.lineWidth
     }
