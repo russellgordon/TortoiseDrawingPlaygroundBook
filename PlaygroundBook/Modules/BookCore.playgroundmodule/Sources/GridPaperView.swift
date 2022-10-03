@@ -97,7 +97,7 @@ public class GridPaperView : UIView {
                 // Restore properties of prior drawing
                 self.turtle.position = priorDrawing.position
                 self.turtle.path = priorDrawing.path
-//                self.turtle.path.move(to: self.turtle.position)
+                self.turtle.path.move(to: self.turtle.position)
                 self.turtle.fillColor = priorDrawing.fillColor
                 self.turtle.penColor = priorDrawing.strokeColor
                 self.turtle.lineWidth = priorDrawing.lineWidth
