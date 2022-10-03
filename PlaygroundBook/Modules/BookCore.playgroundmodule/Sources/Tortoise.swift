@@ -200,12 +200,6 @@ public struct Tortoise {
     
     }
     
-    public mutating func goto(dx: Double, dy: Double) {
-        self.penUp()
-        self.diagonal(dx: dx, dy: dy)
-        self.penDown()
-    }
-        
     /**
      Move the turtle along a diagonal path.
           
