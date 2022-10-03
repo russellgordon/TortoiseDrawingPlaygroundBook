@@ -325,6 +325,12 @@ public struct Tortoise {
      */
     public mutating func drawSelf() {
 
+        // Save current pen state
+        let originalPenLiftState = self.drawing
+        
+        // Put pen down
+        self.penDown()
+        
         left(angleInDegrees: 150)
         forward(distance: 15)
         left(angleInDegrees: 120)
@@ -333,6 +339,12 @@ public struct Tortoise {
         left(angleInDegrees: 120)
         forward(distance: 15)
         right(angleInDegrees: 30)
+        
+        // Restore current pen state
+        if originalPenLiftState == false && self.drawing == true {
+            self.penUp()
+        }
+
 
     }
 
