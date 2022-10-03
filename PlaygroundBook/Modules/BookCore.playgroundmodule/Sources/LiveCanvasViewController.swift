@@ -123,7 +123,9 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                 }
             case "forward":
                 if case let .floatingPoint(distance)? = dictionary["distance"] {
+                    reply("Before forward, position is: \(gridPaper.turtle.currentPosition())")
                     gridPaper.turtle.forward(distance: distance)
+                    reply("After forward, position is: \(gridPaper.turtle.currentPosition())")
                     reply("'forward' command received with distance: \(distance)")
                 } else {
                     reply("'forward' command received, but no distance was provided.")
@@ -131,7 +133,9 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             case "diagonal":
                 if case let .floatingPoint(dx)? = dictionary["dx"],
                    case let .floatingPoint(dy)? = dictionary["dy"] {
+                    reply("Before diagonal, position is: \(gridPaper.turtle.currentPosition())")
                     gridPaper.turtle.diagonal(dx: dx, dy: dy)
+                    reply("After diagonal, position is: \(gridPaper.turtle.currentPosition())")
                     reply("'diagonal' command received with dx: \(dx), dy: \(dy)")
                 } else {
                     reply("'diagonal' command received, but either dx or dy was not provided.")
@@ -175,8 +179,39 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                    case let .floatingPoint(green)? = dictionary["green"],
                    case let .floatingPoint(blue)? = dictionary["blue"],
                    case let .floatingPoint(alpha)? = dictionary["alpha"] {
+                    
+                    // Save the current drawing
+                    let finishedDrawing = Drawing(path: gridPaper.turtle.path,
+                                                  position: gridPaper.turtle.currentPosition(),
+                                                  fillColor: gridPaper.turtle.fillColor,
+                                                  strokeColor: gridPaper.turtle.penColor,
+                                                  lineWidth: gridPaper.turtle.lineWidth)
+                    
+                    // Add to list of finished drawings
+                    gridPaper.turtle.drawings.append(finishedDrawing)
+                    
+                    // Confirm color change
+                    reply("Saved drawing with current pen and fill colors.")
+
+                    reply("Before clearing path, position is: \(gridPaper.turtle.currentPosition())")
+                    
+                    // Save the current position before clearing path (position is a property of the path)
+                    let currentPosition = gridPaper.turtle.currentPosition()
+
+                    // Clear the current path
+                    gridPaper.turtle.path = UIBezierPath()
+                    
+                    // Move new path back to current position
+                    gridPaper.turtle.path.move(to: currentPosition)
+                    reply("Moved turtle to \(gridPaper.turtle.currentPosition())")
+                    reply("Made new drawing starting at same location as last drawing.")
+                    
+                    // Change the pen color
                     gridPaper.turtle.penColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
-                    reply("'setPenColor' command received.")
+                    
+                    // Confirm pen color change
+                    reply("'setPenColor' command received, pen color changed.")
+                    
                 } else {
                     reply("'setPenColor' command received, but one of the RGBA channels was not provided.")
                 }
@@ -185,8 +220,37 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                    case let .floatingPoint(green)? = dictionary["green"],
                    case let .floatingPoint(blue)? = dictionary["blue"],
                    case let .floatingPoint(alpha)? = dictionary["alpha"] {
+                    
+                    // Save the current drawing
+                    let finishedDrawing = Drawing(path: gridPaper.turtle.path,
+                                                  position: gridPaper.turtle.currentPosition(),
+                                                  fillColor: gridPaper.turtle.fillColor,
+                                                  strokeColor: gridPaper.turtle.penColor,
+                                                  lineWidth: gridPaper.turtle.lineWidth)
+
+                    // Add to list of finished drawings
+                    gridPaper.turtle.drawings.append(finishedDrawing)
+                    
+                    // Confirm color change
+                    reply("Saved drawing with current pen and fill colors.")
+                    
+                    // Save the current position before clearing path (position is a property of the path)
+                    let currentPosition = gridPaper.turtle.currentPosition()
+
+                    // Clear the current path
+                    gridPaper.turtle.path = UIBezierPath()
+                    
+                    // Move new path back to current position
+                    gridPaper.turtle.path.move(to: currentPosition)
+                    reply("Moved turtle to \(gridPaper.turtle.currentPosition())")
+                    reply("Made new drawing starting at same location as last drawing.")
+
+                    // Change the fill color
                     gridPaper.turtle.fillColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
-                    reply("'setFillColor' command received.")
+                    
+                    // Confirm fill color change
+                    reply("'setFillColor' command received, fill color changed.")
+                    
                 } else {
                     reply("'setFillColor' command received, but one of the RGBA channels was not provided.")
                 }

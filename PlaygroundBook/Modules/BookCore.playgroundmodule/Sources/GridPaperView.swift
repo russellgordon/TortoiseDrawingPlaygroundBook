@@ -82,8 +82,44 @@ public class GridPaperView : UIView {
         // Remove old turtle path(s) from scene
         self.scene.removeAllChildren()
         
-        // Add current paths back to scene
+        if !self.turtle.drawings.isEmpty {
+            
+            // Save current state of turtle
+            let currentDrawing = Drawing(path: self.turtle.path,
+                                         position: self.turtle.currentPosition(),
+                                         fillColor: self.turtle.fillColor,
+                                         strokeColor: self.turtle.penColor,
+                                         lineWidth: self.turtle.lineWidth)
+            
+            // Iterate over prior drawings and add shapes
+            for priorDrawing in self.turtle.drawings {
+
+                // Restore properties of prior drawing
+                self.turtle.position = priorDrawing.position
+                self.turtle.path = priorDrawing.path
+//                self.turtle.path.move(to: self.turtle.position)
+                self.turtle.fillColor = priorDrawing.fillColor
+                self.turtle.penColor = priorDrawing.strokeColor
+                self.turtle.lineWidth = priorDrawing.lineWidth
+                
+                // Add prior drawing back to scene
+                self.scene.addChild(ShapeSK(turtle: self.turtle).node)
+            }
+            
+            // Restore current state of turtle
+            self.turtle.position = currentDrawing.position
+            self.turtle.path = currentDrawing.path
+//            self.turtle.path.move(to: self.turtle.position)
+            self.turtle.fillColor = currentDrawing.fillColor
+            self.turtle.penColor = currentDrawing.strokeColor
+            self.turtle.lineWidth = currentDrawing.lineWidth
+            
+        }
+                
+        // Now render the current drawing
         self.scene.addChild(ShapeSK(turtle: self.turtle).node)
+
+        
     }
     
     required public init?(coder aDecoder: NSCoder) {

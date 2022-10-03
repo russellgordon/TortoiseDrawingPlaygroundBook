@@ -23,10 +23,19 @@ public enum Role {
     case receiver
 }
 
+public struct Drawing {
+    let path: UIBezierPath
+    let position: CGPoint
+    let fillColor: UIColor
+    let strokeColor: UIColor
+    let lineWidth: CGFloat
+}
+
 public struct Tortoise {
 
     // MARK: Stored Properties
     public var path = UIBezierPath()
+    public var drawings: [Drawing] = []
     public var penColor = UIColor.blue {
         didSet {
             
@@ -45,7 +54,25 @@ public struct Tortoise {
                 "blue": .floatingPoint(blue),
                 "alpha": .floatingPoint(alpha)
             ]))
-
+            
+//            if role == .sender {
+//                // Save the current drawing
+//                let finishedDrawing = Drawing(path: self.path,
+//                                              position: self.position,
+//                                              fillColor: self.fillColor,
+//                                              strokeColor: self.penColor,
+//                                              lineWidth: self.lineWidth)
+//
+//                // Add to list of finished drawings
+//                self.drawings.append(finishedDrawing)
+//
+//                // Clear the current path
+//                self.path = UIBezierPath()
+//
+//                // Move new path to current position
+//                self.path.move(to: self.currentPosition())
+//            }
+            
         }
     }
     public var fillColor = UIColor.clear {
@@ -67,6 +94,24 @@ public struct Tortoise {
                 "blue": .floatingPoint(blue),
                 "alpha": .floatingPoint(alpha)
             ]))
+            
+//            if role == .sender {
+//                // Save the current drawing
+//                let finishedDrawing = Drawing(path: self.path,
+//                                              position: self.position,
+//                                              fillColor: self.fillColor,
+//                                              strokeColor: self.penColor,
+//                                              lineWidth: self.lineWidth)
+//
+//                // Add to list of finished drawings
+//                self.drawings.append(finishedDrawing)
+//
+//                // Clear the current path
+//                self.path = UIBezierPath()
+//
+//                // Move new path to current position
+//                self.path.move(to: self.currentPosition())
+//            }
 
         }
         
@@ -153,6 +198,12 @@ public struct Tortoise {
     
         self.forward(distance: -distance)
     
+    }
+    
+    public mutating func goto(dx: Double, dy: Double) {
+        self.penUp()
+        self.diagonal(dx: dx, dy: dy)
+        self.penDown()
     }
         
     /**
@@ -348,6 +399,8 @@ public struct Tortoise {
     }
     
     mutating func startNewDrawing() {
+        
+        self.drawings = []
         self.path = UIBezierPath()
         self.penColor = UIColor.blue
         self.fillColor = UIColor.clear

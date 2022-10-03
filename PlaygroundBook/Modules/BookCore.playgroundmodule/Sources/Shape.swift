@@ -12,7 +12,7 @@ public struct ShapeSK {
     
     public init(turtle: Tortoise){
         self.node.path = turtle.path.cgPath
-        self.node.position = turtle.position
+        self.node.position = turtle.currentPosition()
         self.node.fillColor = turtle.fillColor
         self.node.strokeColor = turtle.penColor
         self.node.lineWidth = turtle.lineWidth
