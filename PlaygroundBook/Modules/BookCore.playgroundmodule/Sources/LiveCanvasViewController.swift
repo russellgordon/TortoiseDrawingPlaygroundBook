@@ -29,6 +29,7 @@ public class LiveCanvasViewController: UIViewController {
         responseLabel.textAlignment = .left
         responseLabel.translatesAutoresizingMaskIntoConstraints = true
         responseLabel.font = UIFont.systemFont(ofSize: 12)
+        responseLabel.textColor = .black
         responseLabel.adjustsFontSizeToFitWidth = true
         responseLabel.numberOfLines = 0
         gridPaper.addSubview(responseLabel)
