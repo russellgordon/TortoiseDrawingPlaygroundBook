@@ -178,9 +178,18 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     gridPaper.turtle.penColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
                     reply("'setPenColor' command received.")
                 } else {
-                    reply("'reportCurrentPosition' command received, but one of the RGBA channels was not provided.")
+                    reply("'setPenColor' command received, but one of the RGBA channels was not provided.")
                 }
-
+            case "setFillColor":
+                if case let .floatingPoint(red)? = dictionary["red"],
+                   case let .floatingPoint(green)? = dictionary["green"],
+                   case let .floatingPoint(blue)? = dictionary["blue"],
+                   case let .floatingPoint(alpha)? = dictionary["alpha"] {
+                    gridPaper.turtle.fillColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    reply("'setFillColor' command received.")
+                } else {
+                    reply("'setFillColor' command received, but one of the RGBA channels was not provided.")
+                }
             default:
                 // We received a command we didn't recognize. Let's mention that.
                 reply("Hmm. I don't recognize the command \"\(command)\".")
