@@ -162,6 +162,12 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             case "arc":
                 if case let .floatingPoint(radius)? = dictionary["radius"],
                    case let .floatingPoint(angle)? = dictionary["angle"] {
+                    // Heading will have been incremented already due to didSet being activated (and sending a message to the live view) from within the addArc function from within the Tortoise instance on the Playground page
+                    // So, inside the turtle here that is in the live view, we decrement the angle once to compensate
+                    // This ensures that the heading is at the same value in the live view when the arc is about to be drawn, as compared to the heading on the playground page when the arc was about to be drawn
+                    gridPaper.turtle.heading -= angle
+                    
+                    // Now draw the arc
                     gridPaper.turtle.arc(radius: radius, angle: angle)
                     reply("'arc' or 'addArc' command received with radius: \(radius), angle: \(angle)")
                 } else {
