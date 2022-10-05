@@ -36,7 +36,7 @@ public struct Tortoise {
     // MARK: Stored Properties
     public var path = UIBezierPath()
     public var drawings: [Drawing] = []
-    public var penColor = UIColor.blue {
+    public var penColor = UIColor.black {
         didSet {
             
             // SEE: https://www.hackingwithswift.com/example-code/uicolor/how-to-read-the-red-green-blue-and-alpha-color-components-from-a-uicolor
@@ -75,7 +75,38 @@ public struct Tortoise {
             
         }
     }
-    public var fillColor = UIColor.clear {
+    public var fillColor = UIColor.gray {
+        
+        willSet {
+            
+            // DEBUG: What was the old fill color?
+            var red: CGFloat = 0
+            var green: CGFloat = 0
+            var blue: CGFloat = 0
+            var alpha: CGFloat = 0
+            fillColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+
+            // DEBUG: What is the new fill color?
+            var newRed: CGFloat = 0
+            var newGreen: CGFloat = 0
+            var newBlue: CGFloat = 0
+            var newAlpha: CGFloat = 0
+            newValue.getRed(&newRed, green: &newGreen, blue: &newBlue, alpha: &newAlpha)
+
+            // Send message to set new pen color
+            messageToLiveView(action: PlaygroundValue.dictionary([
+                "Command": .string("whenSettingFill"),
+                "red": .floatingPoint(red),
+                "green": .floatingPoint(green),
+                "blue": .floatingPoint(blue),
+                "alpha": .floatingPoint(alpha),
+                "newRed": .floatingPoint(newRed),
+                "newGreen": .floatingPoint(newGreen),
+                "newBlue": .floatingPoint(newBlue),
+                "newAlpha": .floatingPoint(newAlpha),
+            ]))
+            
+        }
         
         didSet {
             
@@ -179,6 +210,22 @@ public struct Tortoise {
         }
         self.path.stroke()
         self.path.fill()
+        
+        // DEBUG: What is the fill color?
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        fillColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        // Send message to set new pen color
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("currentFillColorAfterMovingForwardIs"),
+            "red": .floatingPoint(red),
+            "green": .floatingPoint(green),
+            "blue": .floatingPoint(blue),
+            "alpha": .floatingPoint(alpha)
+        ]))
 
         // Send command to move turtle forward
         messageToLiveView(action: PlaygroundValue.dictionary([
@@ -408,8 +455,8 @@ public struct Tortoise {
         
         self.drawings = []
         self.path = UIBezierPath()
-        self.penColor = UIColor.blue
-        self.fillColor = UIColor.clear
+        self.penColor = UIColor.black
+        self.fillColor = UIColor.gray
         self.lineWidth = 3.0
         self.heading = 0.0
         self.drawing = true

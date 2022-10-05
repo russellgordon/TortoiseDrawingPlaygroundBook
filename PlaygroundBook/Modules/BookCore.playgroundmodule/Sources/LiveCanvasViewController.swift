@@ -213,11 +213,12 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     reply("Made new drawing starting at same location as last drawing.")
                     
                     // Change the pen color
-                    gridPaper.turtle.penColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    let newPenColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    gridPaper.turtle.penColor = newPenColor
                     
                     // Confirm pen color change
-                    reply("'setPenColor' command received, pen color changed.")
-                    
+                    reply("'setPenColor' command received, pen color in gridPaper's turtle is now: \(dump(gridPaper.turtle.penColor)) -- AND -- pen color received from live view's turtle is \(dump(newPenColor))")
+
                 } else {
                     reply("'setPenColor' command received, but one of the RGBA channels was not provided.")
                 }
@@ -238,7 +239,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     gridPaper.turtle.drawings.append(finishedDrawing)
                     
                     // Confirm color change
-                    reply("Saved drawing with current pen and fill colors.")
+                    reply("Saved drawing with current pen and fill colors, drawing is: \(dump(finishedDrawing)).")
                     
                     // Save the current position before clearing path (position is a property of the path)
                     let currentPosition = gridPaper.turtle.currentPosition()
@@ -252,14 +253,53 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     reply("Made new drawing starting at same location as last drawing.")
 
                     // Change the fill color
-                    gridPaper.turtle.fillColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    let newFillColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    gridPaper.turtle.fillColor = newFillColor
                     
                     // Confirm fill color change
-                    reply("'setFillColor' command received, fill color changed.")
+                    reply("'setFillColor' command received, fill color in gridPaper's turtle is now: \(dump(gridPaper.turtle.fillColor)) -- AND -- fill color received from live view's turtle is \(dump(newFillColor))")
                     
                 } else {
                     reply("'setFillColor' command received, but one of the RGBA channels was not provided.")
                 }
+            case "currentFillColorAfterMovingForwardIs":
+                if case let .floatingPoint(red)? = dictionary["red"],
+                   case let .floatingPoint(green)? = dictionary["green"],
+                   case let .floatingPoint(blue)? = dictionary["blue"],
+                   case let .floatingPoint(alpha)? = dictionary["alpha"] {
+
+                    // Change the fill color
+                    let currentFillColorInLiveView = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    
+                    // Confirm fill color change
+                    reply("'currentFillColorAfterMovingForwardIs' command received, fill color in live view's turtle is currently: \(dump(currentFillColorInLiveView)).")
+                    
+                } else {
+                    reply("'currentFillColorAfterMovingForwardIs' command received, but one of the RGBA channels was not provided.")
+                }
+
+            case "whenSettingFill":
+                if case let .floatingPoint(red)? = dictionary["red"],
+                   case let .floatingPoint(green)? = dictionary["green"],
+                   case let .floatingPoint(blue)? = dictionary["blue"],
+                   case let .floatingPoint(alpha)? = dictionary["alpha"],
+                   case let .floatingPoint(newRed)? = dictionary["newRed"],
+                   case let .floatingPoint(newGreen)? = dictionary["newGreen"],
+                   case let .floatingPoint(newBlue)? = dictionary["newBlue"],
+                   case let .floatingPoint(newAlpha)? = dictionary["newAlpha"]
+                {
+
+                    // Change the fill color
+                    let oldFillColorInLiveView = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    let newFillColorInLiveView = UIColor(red: newRed, green: newGreen, blue: newBlue, alpha: newAlpha)
+
+                    // Confirm fill color change
+                    reply("'whenSettingFill' command received, old fill color in live view's turtle is currently: \(dump(oldFillColorInLiveView)) -- AND -- new fill color in live view's turtle will be: \(dump(newFillColorInLiveView)).")
+                    
+                } else {
+                    reply("'whenSettingFill' command received, but one of the RGBA channels was not provided.")
+                }
+
             default:
                 // We received a command we didn't recognize. Let's mention that.
                 reply("Hmm. I don't recognize the command \"\(command)\".")
