@@ -36,7 +36,7 @@ public struct Tortoise {
     // MARK: Stored Properties
     public var path = UIBezierPath()
     public var drawings: [Drawing] = []
-    public var penColor = UIColor.black {
+    public var penColor = UIColor.blue {
         didSet {
             
             // SEE: https://www.hackingwithswift.com/example-code/uicolor/how-to-read-the-red-green-blue-and-alpha-color-components-from-a-uicolor
@@ -68,7 +68,7 @@ public struct Tortoise {
                         
         }
     }
-    public var fillColor = UIColor.gray {
+    public var fillColor = UIColor.clear {
         
         willSet {
             
@@ -418,8 +418,8 @@ public struct Tortoise {
         
         self.drawings = []
         self.path = UIBezierPath()
-        self.penColor = UIColor.black
-        self.fillColor = UIColor.gray
+        self.penColor = UIColor.blue
+        self.fillColor = UIColor.clear
         self.lineWidth = 3.0
         self.heading = 0.0
         self.drawing = true
