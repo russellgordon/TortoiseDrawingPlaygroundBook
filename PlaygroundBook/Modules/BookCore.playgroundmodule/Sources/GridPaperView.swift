@@ -82,42 +82,106 @@ public class GridPaperView : UIView {
         // Remove old turtle path(s) from scene
         self.scene.removeAllChildren()
         
+        // TEST: Add a variety of paths and verify that strokes and fills work as expected
+        
+//        let circleOnePath = CGMutablePath()
+//        circleOnePath.addArc(center: CGPoint.zero,
+//                             radius: 100,
+//                             startAngle: 0,
+//                             endAngle: CGFloat.pi * 2,
+//                             clockwise: true)
+//        let circleOne = SKShapeNode(path: circleOnePath)
+//        circleOne.lineWidth = 10
+//        circleOne.fillColor = .purple
+//        circleOne.strokeColor = .orange
+//        self.scene.addChild(circleOne)
+//
+//        let circleTwoPath = CGMutablePath()
+//        circleTwoPath.addArc(center: CGPoint(x: 200, y: 200),
+//                             radius: 50,
+//                             startAngle: 0,
+//                             endAngle: CGFloat.pi * 2,
+//                             clockwise: true)
+//        let circleTwo = SKShapeNode(path: circleTwoPath)
+//        circleTwo.lineWidth = 5
+//        circleTwo.fillColor = .yellow
+//        circleTwo.strokeColor = .blue
+//        self.scene.addChild(circleTwo)
+//
+//        let polygonOnePath = CGMutablePath()
+//        polygonOnePath.move(to: CGPoint(x: 100, y: -100))
+//        polygonOnePath.addLine(to: CGPoint(x: 100, y: -200))
+//        polygonOnePath.addLine(to: CGPoint(x: 200, y: -200))
+//        polygonOnePath.addLine(to: CGPoint(x: 200, y: -100))
+//        polygonOnePath.addLine(to: CGPoint(x: 100, y: -100))
+//        let polygonOne = SKShapeNode(path: polygonOnePath)
+//        polygonOne.lineWidth = 4
+//        polygonOne.strokeColor = .green
+//        polygonOne.fillColor = .lightGray
+//        self.scene.addChild(polygonOne)
+//
+//        let reportingLabel = SKLabelNode(text: "Path for first rectangle is:\n\(String(describing: polygonOne.path))")
+//        reportingLabel.fontSize = 16
+//        reportingLabel.fontColor = SKColor.black
+//        self.scene.addChild(reportingLabel)
+//
+//        let polygonTwoPath = CGMutablePath()
+//        polygonTwoPath.move(to: CGPoint(x: -100, y: -100))
+//        polygonTwoPath.addLine(to: CGPoint(x: -100, y: -200))
+//        polygonTwoPath.addLine(to: CGPoint(x: -200, y: -200))
+//        polygonTwoPath.addLine(to: CGPoint(x: -200, y: -100))
+//        polygonTwoPath.addLine(to: CGPoint(x: -100, y: -100))
+//        let polygonTwo = SKShapeNode(path: polygonTwoPath)
+//        polygonTwo.lineWidth = 10
+//        polygonTwo.strokeColor = .red
+//        polygonTwo.fillColor = .black
+//        self.scene.addChild(polygonTwo)
+
+        
         if !self.turtle.drawings.isEmpty {
-            
-            // Save current state of turtle
+
+        // Save current state of turtle
             let currentDrawing = Drawing(path: self.turtle.path,
                                          position: self.turtle.currentPosition(),
                                          fillColor: self.turtle.fillColor,
                                          strokeColor: self.turtle.penColor,
                                          lineWidth: self.turtle.lineWidth)
-            
+
             // Iterate over prior drawings and add shapes
             for priorDrawing in self.turtle.drawings {
 
                 // Restore properties of prior drawing
-                self.turtle.position = priorDrawing.position
-                self.turtle.path = priorDrawing.path
-                self.turtle.path.move(to: self.turtle.position)
-                self.turtle.fillColor = priorDrawing.fillColor
-                self.turtle.penColor = priorDrawing.strokeColor
-                self.turtle.lineWidth = priorDrawing.lineWidth
-                
+//                self.turtle.position = priorDrawing.position
+//                self.turtle.path = priorDrawing.path
+//                self.turtle.path.move(to: self.turtle.position)
+//                self.turtle.fillColor = priorDrawing.fillColor
+//                self.turtle.penColor = priorDrawing.strokeColor
+//                self.turtle.lineWidth = priorDrawing.lineWidth
+
                 // Add prior drawing back to scene
-                self.scene.addChild(ShapeSK(turtle: self.turtle).node)
+                let layer = SKShapeNode(path: priorDrawing.path.cgPath)
+                layer.lineWidth = priorDrawing.lineWidth
+                layer.fillColor = priorDrawing.fillColor
+                layer.strokeColor = priorDrawing.strokeColor
+                self.scene.addChild(layer)
             }
-            
+
             // Restore current state of turtle
-            self.turtle.position = currentDrawing.position
+//            self.turtle.position = currentDrawing.position // GAHH THIS LINE WAS THE CULPRIT!
             self.turtle.path = currentDrawing.path
-            self.turtle.path.move(to: self.turtle.position)
+//            self.turtle.path.move(to: self.turtle.position)
+            self.turtle.lineWidth = currentDrawing.lineWidth
             self.turtle.fillColor = currentDrawing.fillColor
             self.turtle.penColor = currentDrawing.strokeColor
-            self.turtle.lineWidth = currentDrawing.lineWidth
-            
+
         }
-                
+
         // Now render the current drawing
-        self.scene.addChild(ShapeSK(turtle: self.turtle).node)
+        let layer = SKShapeNode(path: self.turtle.path.cgPath)
+        layer.lineWidth = self.turtle.lineWidth
+        layer.fillColor = self.turtle.fillColor
+        layer.strokeColor = self.turtle.penColor
+        self.scene.addChild(layer)
 
         
     }

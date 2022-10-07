@@ -15,6 +15,7 @@ public class LiveCanvasViewController: UIViewController {
 
     public var gridPaper: GridPaperView!
     var responseLabel: UILabel!
+//    var statusBar: UILabel!
     
     override public func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,20 @@ public class LiveCanvasViewController: UIViewController {
         responseLabel.adjustsFontSizeToFitWidth = true
         responseLabel.numberOfLines = 0
         gridPaper.addSubview(responseLabel)
+        
+
+//        statusBar = UILabel()
+//        statusBar.textAlignment = .left
+//        statusBar.translatesAutoresizingMaskIntoConstraints = true
+//        statusBar.textColor = .black
+//        statusBar.adjustsFontSizeToFitWidth = true
+//        statusBar.numberOfLines = 0
+//        let font = UIFont.systemFont(ofSize: 16)
+//        let attributes = [NSAttributedString.Key.font: font]
+//        let attributedText = NSAttributedString(string: "Fill color: (not yet set)", attributes: attributes)
+//        statusBar.attributedText = attributedText
+//        statusBar.heightAnchor.constraint(equalToConstant: 100).isActive = true
+//        gridPaper.addSubview(statusBar)
 
         // Make the grid visible as a subview
         self.view.addSubview(gridPaper)
@@ -54,6 +69,10 @@ public class LiveCanvasViewController: UIViewController {
         // Center the response label
         responseLabel.bounds = view.bounds
         responseLabel.center = CGPoint(x: view.bounds.midX + 50, y: view.bounds.midY)
+
+        // Center the status bar
+//        statusBar.bounds = view.bounds
+//        statusBar.center = CGPoint(x: view.bounds.midX, y: view.bounds.midY)
         
     }
     
@@ -161,6 +180,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                    case let .floatingPoint(dy)? = dictionary["dy"] {
                     reply("Before diagonal, position is: \(gridPaper.turtle.currentPosition())")
                     gridPaper.turtle.diagonal(dx: dx, dy: dy)
+                    reply("Turtle path is: \(dump(gridPaper.turtle.path))")
                     reply("After diagonal, position is: \(gridPaper.turtle.currentPosition())")
                     reply("'diagonal' command received with dx: \(dx), dy: \(dy)")
                 } else {
@@ -223,7 +243,10 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     gridPaper.turtle.drawings.append(finishedDrawing)
                     
                     // Confirm color change
-                    reply("Saved drawing with current pen and fill colors.")
+                    reply("Saved drawing with current pen color, fill color, and line width.")
+                    
+                    // Report state of just saved turtle
+                    reply("** AFTER SETTING PEN COLOR ** Turtle just saved is: \(dump(finishedDrawing))")
 
                     reply("Before clearing path, position is: \(gridPaper.turtle.currentPosition())")
                     
@@ -244,6 +267,9 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     
                     // Confirm pen color change
                     reply("'setPenColor' command received, pen color in gridPaper's turtle is now: \(dump(gridPaper.turtle.penColor)) -- AND -- pen color received from live view's turtle is \(dump(newPenColor))")
+                    
+                    // Report state of just saved turtle
+                    reply("** AFTER SETTING PEN COLOR ** Current turtle state is, path: \(gridPaper.turtle.path)\nposition: \(gridPaper.turtle.position)\n fillColor: \(gridPaper.turtle.fillColor)\n strokeColor:\(gridPaper.turtle.penColor)\nlineWidth: \(gridPaper.turtle.lineWidth)")
 
                 } else {
                     reply("'setPenColor' command received, but one of the RGBA channels was not provided.")
@@ -265,7 +291,10 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     gridPaper.turtle.drawings.append(finishedDrawing)
                     
                     // Confirm color change
-                    reply("Saved drawing with current pen and fill colors, drawing is: \(dump(finishedDrawing)).")
+                    reply("Saved drawing with current pen color, fill color, and line width, drawing is: \(dump(finishedDrawing)).")
+                    
+                    // Report state of just saved turtle
+                    reply("** BEFORE SETTING FILL COLOR ** Turtle just saved is: \(dump(finishedDrawing))")
                     
                     // Save the current position before clearing path (position is a property of the path)
                     let currentPosition = gridPaper.turtle.currentPosition()
@@ -277,13 +306,23 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     gridPaper.turtle.path.move(to: currentPosition)
                     reply("Moved turtle to \(gridPaper.turtle.currentPosition())")
                     reply("Made new drawing starting at same location as last drawing.")
+                    reply("Count of drawings in gridPaper's turtle is: \(gridPaper.turtle.drawings.count).")
 
                     // Change the fill color
                     let newFillColor = UIColor(red: red, green: green, blue: blue, alpha: alpha)
                     gridPaper.turtle.fillColor = newFillColor
-                    
+
+//                    // Update the status bar
+//                    let font = UIFont.systemFont(ofSize: 16)
+//                    let attributes = [NSAttributedString.Key.font: font]
+//                    let attributedText = NSAttributedString(string: "Fill color: \(dump(gridPaper.turtle.fillColor))", attributes: attributes)
+//                    statusBar.attributedText = attributedText
+
                     // Confirm fill color change
                     reply("'setFillColor' command received, fill color in gridPaper's turtle is now: \(dump(gridPaper.turtle.fillColor)) -- AND -- fill color received from live view's turtle is \(dump(newFillColor))")
+                    
+                    // Report state of just saved turtle
+                    reply("** AFTER SETTING FILL COLOR ** Current turtle state is, path: \(gridPaper.turtle.path)\nposition: \(gridPaper.turtle.position)\n fillColor: \(gridPaper.turtle.fillColor)\n strokeColor:\(gridPaper.turtle.penColor)\nlineWidth: \(gridPaper.turtle.lineWidth)")
                     
                 } else {
                     reply("'setFillColor' command received, but one of the RGBA channels was not provided.")

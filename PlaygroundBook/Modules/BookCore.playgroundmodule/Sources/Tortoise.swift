@@ -55,6 +55,17 @@ public struct Tortoise {
                 "alpha": .floatingPoint(alpha)
             ]))
             
+            if role == .sender {
+                // Save the current position before clearing path (position is a property of the path)
+                let currentPosition = self.currentPosition()
+
+                // Clear the current path
+                self.path = UIBezierPath()
+                
+                // Move new path back to current position
+                self.path.move(to: currentPosition)
+            }
+            
 //            if role == .sender {
 //                // Save the current drawing
 //                let finishedDrawing = Drawing(path: self.path,
@@ -92,6 +103,8 @@ public struct Tortoise {
             var newBlue: CGFloat = 0
             var newAlpha: CGFloat = 0
             newValue.getRed(&newRed, green: &newGreen, blue: &newBlue, alpha: &newAlpha)
+            
+
 
             // Send message to set new pen color
             messageToLiveView(action: PlaygroundValue.dictionary([
@@ -116,6 +129,18 @@ public struct Tortoise {
             var blue: CGFloat = 0
             var alpha: CGFloat = 0
             fillColor.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+            
+            if role == .sender {
+                // Save the current position before clearing path (position is a property of the path)
+                let currentPosition = self.currentPosition()
+
+                // Clear the current path
+                self.path = UIBezierPath()
+                
+                // Move new path back to current position
+                self.path.move(to: currentPosition)
+            }
+
             
             // Send message to set new pen color
             messageToLiveView(action: PlaygroundValue.dictionary([
@@ -208,8 +233,8 @@ public struct Tortoise {
         } else {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
-        self.path.stroke()
-        self.path.fill()
+//        self.path.stroke()
+//        self.path.fill()
         
         // DEBUG: What is the fill color?
         var red: CGFloat = 0
@@ -264,8 +289,8 @@ public struct Tortoise {
         } else {
             self.path.move(to: CGPoint(x: currentX + dx, y: currentY + dy))
         }
-        self.path.stroke()
-        self.path.fill()
+//        self.path.stroke()
+//        self.path.fill()
         
         // Send command to draw a diagonal line
         messageToLiveView(action: PlaygroundValue.dictionary([
@@ -428,7 +453,7 @@ public struct Tortoise {
             let endAngle = (90 + heading + angle) * (.pi / 180)
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: false)
-            self.path.fill()
+//            self.path.fill()
         } else {
             let toCenterInRadians = (90 + heading) * (.pi / 180)
             let dx = radius * cos(toCenterInRadians)
@@ -439,7 +464,7 @@ public struct Tortoise {
             let endAngle = (-90 + heading + angle) * (.pi / 180)
             heading += angle
             self.path.addArc(withCenter: CGPoint(x: centerX, y: centerY), radius: CGFloat(radius), startAngle: CGFloat(startAngle), endAngle: CGFloat(endAngle), clockwise: true)
-            self.path.fill()
+//            self.path.fill()
         }
         
         // Send command to update the drawing in the live view
