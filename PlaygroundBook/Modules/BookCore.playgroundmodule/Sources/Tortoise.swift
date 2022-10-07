@@ -340,10 +340,18 @@ public struct Tortoise {
 
         // Save current pen state
         let originalPenLiftState = self.drawing
+//        let originalPenColor = self.penColor
+//        let originalFillColor = self.fillColor
+//        let originalLineWidth = self.lineWidth
         
         // Put pen down
         self.penDown()
         
+        // Change to new values to draw turtle
+//        self.penColor = .blue
+//        self.fillColor = .yellow
+//        self.lineWidth = 3
+                
         left(angleInDegrees: 150)
         forward(distance: 15)
         left(angleInDegrees: 120)
@@ -357,6 +365,11 @@ public struct Tortoise {
         if originalPenLiftState == false && self.drawing == true {
             self.penUp()
         }
+        
+        // Restore drawing state
+//        self.penColor = originalPenColor
+//        self.fillColor = originalFillColor
+//        self.lineWidth = originalLineWidth
 
     }
 
