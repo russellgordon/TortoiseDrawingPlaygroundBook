@@ -108,8 +108,34 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             case "setLineWidth":
                 if case let .floatingPoint(oldLineWidth)? = dictionary["from"],
                 case let .floatingPoint(newLineWidth)? = dictionary["to"] {
+                    
+                    // Save the current drawing
+                    let finishedDrawing = Drawing(path: gridPaper.turtle.path,
+                                                  position: gridPaper.turtle.position,
+                                                  fillColor: gridPaper.turtle.fillColor,
+                                                  strokeColor: gridPaper.turtle.penColor,
+                                                  lineWidth: gridPaper.turtle.lineWidth)
+
+                    // Add to list of finished drawings
+                    gridPaper.turtle.drawings.append(finishedDrawing)
+                    
+                    // Confirm color change
+                    reply("Saved drawing with current pen color, fill color, and line width.")
+
+                    // Save the current position before clearing path (position is a property of the path)
+                    let currentPosition = gridPaper.turtle.currentPosition()
+
+                    // Clear the current path
+                    gridPaper.turtle.path = UIBezierPath()
+                    
+                    // Move new path back to current position
+                    gridPaper.turtle.path.move(to: currentPosition)
+
+                    // Change the line width
                     gridPaper.turtle.lineWidth = newLineWidth
+                    
                     reply("'setLineWidth' command received, line width was: \(oldLineWidth) but is now \(newLineWidth)")
+                    
                 } else {
                     reply("'setLineWidth' command received, but no new line width was provided.")
                 }
