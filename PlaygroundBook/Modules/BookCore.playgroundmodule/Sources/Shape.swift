@@ -8,13 +8,14 @@
 import SpriteKit
 
 public struct ShapeSK {
+    
     public let node = SKShapeNode()
     
     public init(turtle: Tortoise){
         self.node.path = turtle.path.cgPath
-//        self.node.position = turtle.position  // Not needed when drawing multiple shapes
         self.node.fillColor = turtle.fillColor
         self.node.strokeColor = turtle.penColor
         self.node.lineWidth = turtle.lineWidth
     }
+    
 }

@@ -82,8 +82,8 @@ public class GridPaperView : UIView {
         // Remove old turtle path(s) from scene
         self.scene.removeAllChildren()
         
-        // TEST: Add a variety of paths and verify that strokes and fills work as expected
-        
+        // TEST: Add a variety of paths directly as SKShapeNodes and verify that strokes and fills work as expected
+        //       Paths drawn via the Tortoise abstraction should produce the same visual output.
 //        let circleOnePath = CGMutablePath()
 //        circleOnePath.addArc(center: CGPoint.zero,
 //                             radius: 100,
@@ -120,6 +120,7 @@ public class GridPaperView : UIView {
 //        polygonOne.fillColor = .lightGray
 //        self.scene.addChild(polygonOne)
 //
+//        // Use to compare path made directly using an SKLabelNode to the path the Tortoise abstraction is creating
 //        let reportingLabel = SKLabelNode(text: "Path for first rectangle is:\n\(String(describing: polygonOne.path))")
 //        reportingLabel.fontSize = 16
 //        reportingLabel.fontColor = SKColor.black
@@ -140,7 +141,7 @@ public class GridPaperView : UIView {
         
         if !self.turtle.drawings.isEmpty {
 
-        // Save current state of turtle
+            // Save current state of turtle
             let currentDrawing = Drawing(path: self.turtle.path,
                                          position: self.turtle.currentPosition(),
                                          fillColor: self.turtle.fillColor,
@@ -149,14 +150,6 @@ public class GridPaperView : UIView {
 
             // Iterate over prior drawings and add shapes
             for priorDrawing in self.turtle.drawings {
-
-                // Restore properties of prior drawing
-//                self.turtle.position = priorDrawing.position
-//                self.turtle.path = priorDrawing.path
-//                self.turtle.path.move(to: self.turtle.position)
-//                self.turtle.fillColor = priorDrawing.fillColor
-//                self.turtle.penColor = priorDrawing.strokeColor
-//                self.turtle.lineWidth = priorDrawing.lineWidth
 
                 // Add prior drawing back to scene
                 let layer = SKShapeNode(path: priorDrawing.path.cgPath)
@@ -167,22 +160,19 @@ public class GridPaperView : UIView {
             }
 
             // Restore current state of turtle
-//            self.turtle.position = currentDrawing.position // GAHH THIS LINE WAS THE CULPRIT!
             self.turtle.path = currentDrawing.path
-//            self.turtle.path.move(to: self.turtle.position)
             self.turtle.lineWidth = currentDrawing.lineWidth
             self.turtle.fillColor = currentDrawing.fillColor
             self.turtle.penColor = currentDrawing.strokeColor
 
         }
 
-        // Now render the current drawing
+        // Now render the current drawing described by the turtle
         let layer = SKShapeNode(path: self.turtle.path.cgPath)
         layer.lineWidth = self.turtle.lineWidth
         layer.fillColor = self.turtle.fillColor
         layer.strokeColor = self.turtle.penColor
         self.scene.addChild(layer)
-
         
     }
     
