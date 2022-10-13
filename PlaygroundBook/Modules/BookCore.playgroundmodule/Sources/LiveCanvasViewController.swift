@@ -23,6 +23,11 @@ public class LiveCanvasViewController: UIViewController {
         gridPaper = GridPaperView()
         self.view.backgroundColor = .white
         gridPaper.translatesAutoresizingMaskIntoConstraints = false
+        
+        // Set whether to draw lines of grid
+        gridPaper.shouldDrawMainLines = false
+        gridPaper.shouldDrawCenterLines = false
+        
                 
         // Add response label to the grid
         responseLabel = UILabel()
@@ -360,29 +365,41 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
     {
         // Start "recording" the PDF
         let pdfData = NSMutableData()
-        UIGraphicsBeginPDFContextToData(pdfData, self.gridPaper.bounds, nil)
+
+        // SEE: https://www.hackingwithswift.com/example-code/uikit/how-to-render-pdfs-using-uigraphicspdfrenderer
+        // ... for notes on pages sizes
+        let scaleFactor = 2
+        let pageRect = CGRect(origin: CGPoint(x: -306 * scaleFactor, y: 396 * scaleFactor), size: CGSize(width: 612 * scaleFactor, height: 792 * scaleFactor))
+        
+        // Begin drawing the PDF
+        UIGraphicsBeginPDFContextToData(pdfData, pageRect, nil)
         UIGraphicsBeginPDFPage()
 
         // Get a context to render in
         guard let pdfContext = UIGraphicsGetCurrentContext() else { return }
 
-        // Render all subviews of the SpriteKit scene into the graphics context
-//        self.gridPaper.viewSK.layoutIfNeeded()
-//        if let view = self.gridPaper.viewSK.snapshotView(afterScreenUpdates: true) {
-//            view.layer.render(in: pdfContext)
-//        }
-        
-//        self.gridPaper.viewSK.layer.render(in: pdfContext)
-        
-//        for view in self.gridPaper.subviews {
-//            view.layer.render(in: pdfContext)
-//        }
-        
-        self.gridPaper.layer.render(in: pdfContext)
-        let rect = CGRect(origin: CGPoint.zero, size: self.gridPaper.bounds.size)
-        self.gridPaper.drawHierarchy(in: rect, afterScreenUpdates: true)
-//        UIGraphicsGetImageFromCurrentImageContext()
-        
+        // Render the grid paper
+//        self.gridPaper.layer.render(in: pdfContext)
+//
+//        // Render the axe labels
+//        let midX = self.gridPaper.bounds.midX
+//        let midY = self.gridPaper.bounds.midY
+//        let rect = CGRect(origin: CGPoint(x: midX, y: midY), size: self.gridPaper.bounds.size)
+//        self.gridPaper.drawHierarchy(in: rect, afterScreenUpdates: true)
+//
+        // Now try to render one of the paths
+        // SEE: https://samwize.com/2016/08/25/drawing-images-with-uibezierpath/
+        // Set path
+        let path = self.gridPaper.turtle.path
+        // Set line width of path
+        path.lineWidth = self.gridPaper.turtle.lineWidth
+        // Set current fill color in this drawing context
+        self.gridPaper.turtle.fillColor.setFill()
+        // Set current stroke color in this drawing context
+        self.gridPaper.turtle.penColor.setStroke()
+        // Now fill and stroke the path
+        path.fill()
+        path.stroke()
 
         // Stop "recording" the PDF
         UIGraphicsEndPDFContext()
