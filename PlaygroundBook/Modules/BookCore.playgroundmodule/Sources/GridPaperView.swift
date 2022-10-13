@@ -15,9 +15,11 @@ public class GridPaperView : UIView {
     let xAxisLabel = GridPaperView.axisFactory(text: "X-Axis")
     let yAxisLabel = GridPaperView.axisFactory(text: "Y-Axis")
     
-    let scene = CanvasScene()
+    public let scene = CanvasScene()
     
     public var turtle = Tortoise(role: .receiver)
+    
+    public var viewSK: SKView!
     
     public var shouldDrawMainLines: Bool = true {
         didSet {
@@ -64,7 +66,7 @@ public class GridPaperView : UIView {
         self.scene.backgroundColor = .clear
         self.scene.anchorPoint = CGPoint(x: 0.5, y: 0.5)
         
-        let viewSK: SKView = SKView()
+        viewSK = SKView()
         viewSK.allowsTransparency = true
         viewSK.backgroundColor = .clear
         viewSK.presentScene(scene)

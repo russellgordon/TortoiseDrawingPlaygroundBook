@@ -228,6 +228,9 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                 gridPaper.turtle.startNewDrawing()
                 self.debugMode = false
                 self.responseLabel.text = ""
+
+            case "renderDrawingToPDF":
+                self.createPDFFromView(saveToDocumentsWithFileName: "PlaygroundDrawing.pdf")
                 
             case "toggleDebugMode":
                 reply("'toggleDebugMode' command received. Debug mode is now: \(!self.debugMode)")
@@ -347,7 +350,48 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
 
             // Update the drawing (remove old paths, add new ones)
             gridPaper.refreshPaths()
+            
 
+        }
+    }
+    
+    // SEE: https://stackoverflow.com/a/38754196/5537362
+    func createPDFFromView(saveToDocumentsWithFileName fileName: String)
+    {
+        // Start "recording" the PDF
+        let pdfData = NSMutableData()
+        UIGraphicsBeginPDFContextToData(pdfData, self.gridPaper.bounds, nil)
+        UIGraphicsBeginPDFPage()
+
+        // Get a context to render in
+        guard let pdfContext = UIGraphicsGetCurrentContext() else { return }
+
+        // Render all subviews of the SpriteKit scene into the graphics context
+//        self.gridPaper.viewSK.layoutIfNeeded()
+//        if let view = self.gridPaper.viewSK.snapshotView(afterScreenUpdates: true) {
+//            view.layer.render(in: pdfContext)
+//        }
+        
+//        self.gridPaper.viewSK.layer.render(in: pdfContext)
+        
+//        for view in self.gridPaper.subviews {
+//            view.layer.render(in: pdfContext)
+//        }
+        
+        self.gridPaper.layer.render(in: pdfContext)
+        let rect = CGRect(origin: CGPoint.zero, size: self.gridPaper.bounds.size)
+        self.gridPaper.drawHierarchy(in: rect, afterScreenUpdates: true)
+//        UIGraphicsGetImageFromCurrentImageContext()
+        
+
+        // Stop "recording" the PDF
+        UIGraphicsEndPDFContext()
+
+        // Save the PDF
+        if let documentDirectories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
+            let documentsFileName = documentDirectories + "/" + fileName
+            debugPrint(documentsFileName)
+            pdfData.write(toFile: documentsFileName, atomically: true)
         }
     }
     

@@ -333,6 +333,15 @@ public struct Tortoise {
 
     }
     
+    /// Save a PDF of the current drawing
+    public func renderDrawingToPDF() {
+        
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("renderDrawingToPDF")
+        ]))
+
+    }
+    
     /**
      Draw a triangle representing the turtle. The forward vertex of the triangle indicates the position of the turtle. The rear portion of the triangle indicates the heading of the turtle. For example, a triangle pointing to the right means the turtle has a heading of 0 degrees.
      */
