@@ -377,6 +377,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
 
         // Get a context to render in
         guard UIGraphicsGetCurrentContext() != nil else { return }
+//        guard let pdfContext = UIGraphicsGetCurrentContext() else { return }
 
         // Render the grid paper
 //        self.gridPaper.layer.render(in: pdfContext)
@@ -386,15 +387,20 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
 //        let midY = self.gridPaper.bounds.midY
 //        let rect = CGRect(origin: CGPoint(x: midX, y: midY), size: self.gridPaper.bounds.size)
 //        self.gridPaper.drawHierarchy(in: rect, afterScreenUpdates: true)
-//
+
         // Render prior paths
         for priorDrawing in self.gridPaper.turtle.drawings {
             
             
-            // Now render the final path in the drawing
+            // Render current path in drawing
             // SEE: https://samwize.com/2016/08/25/drawing-images-with-uibezierpath/
             // Set path
             let path = priorDrawing.path
+            
+            // Transform the path so it is rotated correctly
+            let rotation = CGAffineTransform(rotationAngle: CGFloat.pi)
+            path.apply(rotation)
+
             // Set line width of path
             path.lineWidth = priorDrawing.lineWidth
             // Set current fill color in this drawing context
@@ -407,14 +413,17 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             // Now fill and stroke the path
             path.fill()
             path.stroke()
-
-            
         }
         
         // Now render the final path in the drawing
         // SEE: https://samwize.com/2016/08/25/drawing-images-with-uibezierpath/
         // Set path
         let path = self.gridPaper.turtle.path
+        
+        // Transform the path so it is rotated correctly
+        let rotation = CGAffineTransform(rotationAngle: CGFloat.pi)
+        path.apply(rotation)
+        
         // Set line width of path
         path.lineWidth = self.gridPaper.turtle.lineWidth
         // Set current fill color in this drawing context
@@ -430,6 +439,10 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
 
         // Stop "recording" the PDF
         UIGraphicsEndPDFContext()
+        
+        // Undo the rotation in the path shown on screen
+        let reverseRotation = CGAffineTransform(rotationAngle: -CGFloat.pi)
+        path.apply(reverseRotation)
 
         // Save the PDF
         if let documentDirectories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
@@ -437,6 +450,20 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             debugPrint(documentsFileName)
             pdfData.write(toFile: documentsFileName, atomically: true)
         }
+        
+        // Now reverse the changes to the other paths in the drawing...
+        for priorDrawing in self.gridPaper.turtle.drawings {
+            
+            
+            // Set path
+            let path = priorDrawing.path
+            
+            // Undo the rotation in the path shown on screen
+            let reverseRotation = CGAffineTransform(rotationAngle: -CGFloat.pi)
+            path.apply(reverseRotation)
+
+        }
+        
     }
     
 }
