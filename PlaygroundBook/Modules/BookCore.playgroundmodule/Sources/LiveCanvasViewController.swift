@@ -387,7 +387,31 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
 //        let rect = CGRect(origin: CGPoint(x: midX, y: midY), size: self.gridPaper.bounds.size)
 //        self.gridPaper.drawHierarchy(in: rect, afterScreenUpdates: true)
 //
-        // Now try to render one of the paths
+        // Render prior paths
+        for priorDrawing in self.gridPaper.turtle.drawings {
+            
+            
+            // Now render the final path in the drawing
+            // SEE: https://samwize.com/2016/08/25/drawing-images-with-uibezierpath/
+            // Set path
+            let path = priorDrawing.path
+            // Set line width of path
+            path.lineWidth = priorDrawing.lineWidth
+            // Set current fill color in this drawing context
+            priorDrawing.fillColor.setFill()
+            // Set current stroke color in this drawing context
+            priorDrawing.strokeColor.setStroke()
+            // Set end cap
+            path.lineCapStyle = .round
+            path.lineJoinStyle = .round
+            // Now fill and stroke the path
+            path.fill()
+            path.stroke()
+
+            
+        }
+        
+        // Now render the final path in the drawing
         // SEE: https://samwize.com/2016/08/25/drawing-images-with-uibezierpath/
         // Set path
         let path = self.gridPaper.turtle.path
