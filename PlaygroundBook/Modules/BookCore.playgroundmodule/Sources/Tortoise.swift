@@ -246,6 +246,123 @@ public struct Tortoise {
     }
     
     /**
+     Draw some text at the given position.
+          
+     - Parameters:
+         - message: The text to be drawn on screen.
+         - at: Text will be drawn starting at this location.
+         - size: The size of the text, specified in points.
+         - kerning: The spacing between letters of the text. 0.0 is neutral, negative values draw letters together, positive values move letters further apart.
+     */
+    public mutating func drawAxes(withScale: Bool = false, by: Int = 50, width: Int, height: Int, color: UIColor) {
+        
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
+        
+        // Save current canvas line width
+        let currentLineWidth = self.lineWidth
+        self.lineWidth = 1
+        
+        // Save current canvas line color
+        let currentLineColor = self.penColor
+                
+        // Change to color provided by user
+        self.penColor = UIColor(red: red, green: green, blue: blue, alpha: alpha / 2)
+
+        // Draw horizontal axis, opaque
+        self.lineWidth = 2
+        self.drawLine(from: Point(x: width * -1, y: 0), to: Point(x: width, y: 0))
+        
+        // Draw vertical axis, opaque
+        self.drawLine(from: Point(x: 0, y: height * -1), to: Point(x: 0, y: height))
+
+        // Determine horizontal start and end points
+        let horizontalStart = width / by * -1
+        let horizontalEnd = horizontalStart * -1
+
+        // Determine vertical start and end points
+        let verticalStart = height / by * -1
+        let verticalEnd = verticalStart * -1
+
+        // Draw labels, opaque
+        self.drawText(message: "x", at: Point(x: horizontalEnd * by - 10, y: -15), size: 12)
+        self.drawText(message: "y", at: Point(x: 5, y: verticalEnd * by - 20), size: 12)
+
+        // Draw scale if requested, opaque
+        self.lineWidth = 1
+        if withScale {
+            
+            // Skip labelling every stop on the axis if the value is small
+            var labellingStep = by
+            if by < 50 {
+                labellingStep = by * 2
+            }
+            if labellingStep < 25 {
+                labellingStep *= 2
+            }
+            
+            // Draw horizontal scale and grid
+            for x in stride(from: horizontalStart * by, through: horizontalEnd * by, by: by) {
+                
+                // Scale
+                if x != 0 && x.quotientAndRemainder(dividingBy: labellingStep).remainder == 0 {
+                    var offset = 0
+                    if x <= -100 {
+                        offset = -12
+                    } else if x > -100 && x <= 0 {
+                        offset = -9
+                    } else if x > 0 && x < 100 {
+                        offset = -7
+                    } else if x >= 100 && x < 1000 {
+                        offset = -9
+                    }
+                    self.drawText(message: "\(x)", at: Point(x: x + offset, y: 5), size: 10)
+                }
+                
+                // Grid
+//                self.drawLine(from: Point(x: x, y: height * -1), to: Point(x: x, y: height), dashed: true)
+                self.drawLine(from: Point(x: x, y: height * -1), to: Point(x: x, y: height))
+            }
+
+            // Draw vertical scale and grid
+            for y in stride(from: verticalStart * by, through: verticalEnd * by, by: by) {
+                
+                // Scale
+                if y != 0 && y != verticalEnd * by && y.quotientAndRemainder(dividingBy: labellingStep).remainder == 0 {
+                    self.drawText(message: "\(y)", at: Point(x: 5, y: y - 7), size: 10)
+                }
+                
+                // Grid
+                self.drawLine(from: Point(x: width * -1, y: y), to: Point(x: width, y: y))
+//                self.drawLine(from: Point(x: width * -1, y: y), to: Point(x: width, y: y), dashed: true)
+            }
+            
+
+        }
+        
+        // Restore text, line color, and width
+        self.penColor = currentLineColor
+        self.lineWidth = currentLineWidth
+        
+        // Send command to draw axes at provided position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("drawAxes"),
+            "withScale": .boolean(withScale),
+            "by": .integer(by),
+            "width": .integer(width),
+            "height": .integer(height),
+            "red": .floatingPoint(red),
+            "green": .floatingPoint(green),
+            "blue": .floatingPoint(blue),
+            "alpha": .floatingPoint(alpha)
+        ]))
+
+    }
+    
+    /**
      Move the turtle backward, 180 degrees opposite it's current heading.
           
      - Parameters:
