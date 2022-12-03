@@ -376,7 +376,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         UIGraphicsBeginPDFPage()
 
         // Get a context to render in
-        guard let pdfContext = UIGraphicsGetCurrentContext() else { return }
+        guard UIGraphicsGetCurrentContext() != nil else { return }
 
         // Render the grid paper
 //        self.gridPaper.layer.render(in: pdfContext)
