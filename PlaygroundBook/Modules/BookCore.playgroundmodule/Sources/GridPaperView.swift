@@ -156,7 +156,7 @@ public class GridPaperView : UIView {
                 // Add prior drawing back to scene
                 let layer = SKShapeNode(path: priorDrawing.path.cgPath)
 //                layer.lineJoin = .round
-//                layer.lineCap = .round
+                layer.lineCap = .round
                 layer.lineWidth = priorDrawing.lineWidth
                 layer.fillColor = priorDrawing.fillColor
                 layer.strokeColor = priorDrawing.strokeColor
@@ -174,7 +174,7 @@ public class GridPaperView : UIView {
         // Now render the current drawing described by the turtle
         let layer = SKShapeNode(path: self.turtle.path.cgPath)
 //        layer.lineJoin = .round
-//        layer.lineCap = .round
+        layer.lineCap = .round
         layer.lineWidth = self.turtle.lineWidth
         layer.fillColor = self.turtle.fillColor
         layer.strokeColor = self.turtle.penColor
