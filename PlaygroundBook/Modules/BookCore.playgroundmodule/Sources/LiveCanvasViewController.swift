@@ -120,7 +120,8 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                                                   position: gridPaper.turtle.position,
                                                   fillColor: gridPaper.turtle.fillColor,
                                                   strokeColor: gridPaper.turtle.penColor,
-                                                  lineWidth: gridPaper.turtle.lineWidth)
+                                                  lineWidth: gridPaper.turtle.lineWidth,
+                                                  text: nil)
 
                     // Add to list of finished drawings
                     gridPaper.turtle.drawings.append(finishedDrawing)
@@ -252,7 +253,8 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                                                   position: gridPaper.turtle.position,
                                                   fillColor: gridPaper.turtle.fillColor,
                                                   strokeColor: gridPaper.turtle.penColor,
-                                                  lineWidth: gridPaper.turtle.lineWidth)
+                                                  lineWidth: gridPaper.turtle.lineWidth,
+                                                  text: nil)
                     
                     // Add to list of finished drawings
                     gridPaper.turtle.drawings.append(finishedDrawing)
@@ -295,7 +297,8 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                                                   position: gridPaper.turtle.position,
                                                   fillColor: gridPaper.turtle.fillColor,
                                                   strokeColor: gridPaper.turtle.penColor,
-                                                  lineWidth: gridPaper.turtle.lineWidth)
+                                                  lineWidth: gridPaper.turtle.lineWidth,
+                                                  text: nil)
 
                     // Add to list of finished drawings
                     gridPaper.turtle.drawings.append(finishedDrawing)
@@ -324,6 +327,63 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     
                 } else {
                     reply("'setFillColor' command received, but one of the RGBA channels was not provided.")
+                }
+                
+            case "drawText":
+                if case let .string(message)? = dictionary["message"],
+                   case let .floatingPoint(x)? = dictionary["atX"],
+                   case let .floatingPoint(y)? = dictionary["atY"],
+                   case let .floatingPoint(size)? = dictionary["size"],
+                   case let .floatingPoint(kerning)? = dictionary["kerning"] {
+                    
+                    // Save the current drawing
+                    let finishedDrawing = Drawing(path: gridPaper.turtle.path,
+                                                  position: gridPaper.turtle.position,
+                                                  fillColor: gridPaper.turtle.fillColor,
+                                                  strokeColor: gridPaper.turtle.penColor,
+                                                  lineWidth: gridPaper.turtle.lineWidth,
+                                                  text: nil)
+
+                    // Add to list of finished drawings
+                    gridPaper.turtle.drawings.append(finishedDrawing)
+                    
+                    // Confirm that current drawing attributes were saved
+                    reply("** BEFORE DRAWING TEXT ** Turtle just saved is: \(dump(finishedDrawing))")
+                    
+                    // Save the current position before clearing path (position is a property of the path)
+                    let currentPosition = gridPaper.turtle.currentPosition()
+
+                    // Clear the current path
+                    gridPaper.turtle.path = UIBezierPath()
+                    
+                    // Move new path back to current position
+                    gridPaper.turtle.path.move(to: currentPosition)
+
+                    // Add a drawing with the text just received
+                    let textToRender = Text(message: message,
+                                            position: Point(x: x, y: y),
+                                            size: size,
+                                            kerning: kerning)
+                    
+                    // Save the drawing that contains this text to render
+                    let drawingWithText = Drawing(path: gridPaper.turtle.path,
+                                                  position: gridPaper.turtle.position,
+                                                  fillColor: gridPaper.turtle.fillColor,
+                                                  strokeColor: gridPaper.turtle.penColor,
+                                                  lineWidth: gridPaper.turtle.lineWidth,
+                                                  text: textToRender)
+
+                    // Add to list of finished drawings
+                    gridPaper.turtle.drawings.append(drawingWithText)
+                    
+                    // Confirm fill color change
+                    reply("'drawText' command received")
+                    
+                    // Report state of just saved turtle
+                    reply("** AFTER DRAWING TEXT ** Current turtle state is, path: \(gridPaper.turtle.path)\nposition: \(gridPaper.turtle.position)\n fillColor: \(gridPaper.turtle.fillColor)\n strokeColor:\(gridPaper.turtle.penColor)\nlineWidth: \(gridPaper.turtle.lineWidth)")
+                    
+                } else {
+                    reply("'drawText' command received, but some required information was missing.")
                 }
                 
             case "whenSettingFill":
@@ -391,32 +451,64 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         // Render prior paths
         for priorDrawing in self.gridPaper.turtle.drawings {
             
-            
-            // Render current path in drawing
-            // SEE: https://samwize.com/2016/08/25/drawing-images-with-uibezierpath/
-            // Set path
-            let path = priorDrawing.path
-            
-            // Transform the path so it is rotated correctly
-            let rotation = CGAffineTransform(rotationAngle: CGFloat.pi)
-            path.apply(rotation)
-            
-            // Horizontally flip the path
-            let flip = CGAffineTransform(scaleX: -1, y: 1)
-            path.apply(flip)
+            if let textToRender = priorDrawing.text {
+                
+                // Render text
+                
+                // Set the line spacing to 1
+                let paragraphStyle = NSMutableParagraphStyle()
+                paragraphStyle.lineSpacing = 1.0
+                
+                // set the Obliqueness (tilt of text) to 0.0
+                let skew = 0.0
+                
+                // Set attributes of text
+                let textAttributes: [NSAttributedString.Key : AnyObject] = [
+                    NSAttributedString.Key.font: UIFont(name: "Helvetica Bold", size: textToRender.size) as AnyObject,
+                    NSAttributedString.Key.paragraphStyle: paragraphStyle,
+                    NSAttributedString.Key.obliqueness: skew as AnyObject,
+                    NSAttributedString.Key.foregroundColor: UIColor.black
+                ]
+                
+                // Apply the attributes to the text
+                let formattedText = NSAttributedString(string: textToRender.message, attributes: textAttributes)
+                
+                // Draw in the current context
+                let translatedPosition = CGPoint(x: textToRender.position.x - textToRender.size * 0.08,
+                                                 y: textToRender.position.y * -1 - textToRender.size * 0.97)
+                formattedText.draw(at: translatedPosition)
+                
+                
+            } else {
 
-            // Set line width of path
-            path.lineWidth = priorDrawing.lineWidth
-            // Set current fill color in this drawing context
-            priorDrawing.fillColor.setFill()
-            // Set current stroke color in this drawing context
-            priorDrawing.strokeColor.setStroke()
-            // Set end cap and join style
-            path.lineCapStyle = .round
-            path.lineJoinStyle = .round
-            // Now fill and stroke the path
-            path.fill()
-            path.stroke()
+                // Just render current path in drawing
+
+                // SEE: https://samwize.com/2016/08/25/drawing-images-with-uibezierpath/
+                // Set path
+                let path = priorDrawing.path
+                
+                // Transform the path so it is rotated correctly
+                let rotation = CGAffineTransform(rotationAngle: CGFloat.pi)
+                path.apply(rotation)
+                
+                // Horizontally flip the path
+                let flip = CGAffineTransform(scaleX: -1, y: 1)
+                path.apply(flip)
+
+                // Set line width of path
+                path.lineWidth = priorDrawing.lineWidth
+                // Set current fill color in this drawing context
+                priorDrawing.fillColor.setFill()
+                // Set current stroke color in this drawing context
+                priorDrawing.strokeColor.setStroke()
+                // Set end cap and join style
+                path.lineCapStyle = .round
+                path.lineJoinStyle = .round
+                // Now fill and stroke the path
+                path.fill()
+                path.stroke()
+            }
+            
         }
         
         // Now render the final path in the drawing

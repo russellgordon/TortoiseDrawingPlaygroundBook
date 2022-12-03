@@ -23,12 +23,20 @@ public enum Role {
     case receiver
 }
 
+public struct Text {
+    let message: String
+    let position: Point
+    let size: Double
+    let kerning: Double
+}
+
 public struct Drawing {
     let path: UIBezierPath
     let position: CGPoint
     let fillColor: UIColor
     let strokeColor: UIColor
     let lineWidth: CGFloat
+    let text: Text?
 }
 
 public struct Tortoise {
@@ -199,6 +207,29 @@ public struct Tortoise {
         messageToLiveView(action: PlaygroundValue.dictionary([
             "Command": .string("forward"),
             "distance": .floatingPoint(distance)
+        ]))
+
+    }
+    
+    /**
+     Draw some text at the given position.
+          
+     - Parameters:
+         - message: The text to be drawn on screen.
+         - at: Text will be drawn starting at this location.
+         - size: The size of the text, specified in points.
+         - kerning: The spacing between letters of the text. 0.0 is neutral, negative values draw letters together, positive values move letters further apart.
+     */
+    public func drawText(message: String, at: Point, size: Double = 24, kerning : Double = 0.0) {
+                
+        // Send command to draw text at provided position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("drawText"),
+            "message": .string(message),
+            "atX": .floatingPoint(at.x),
+            "atY": .floatingPoint(at.y),
+            "size": .floatingPoint(size),
+            "kerning": .floatingPoint(kerning)
         ]))
 
     }

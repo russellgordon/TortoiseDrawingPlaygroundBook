@@ -12,6 +12,10 @@ if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
     ])
     proxy.send(action)
 }
+
+// Ensure autocomplete keeps arguments of type point expanded as Point, not CGPoint
+typealias Point = CGPoint
+
 //#-end-hidden-code
 /*:
  The code below creates a turtle that will draw shapes for you.

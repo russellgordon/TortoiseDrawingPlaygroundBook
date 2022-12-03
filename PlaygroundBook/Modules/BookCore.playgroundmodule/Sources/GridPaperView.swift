@@ -148,19 +148,37 @@ public class GridPaperView : UIView {
                                          position: self.turtle.currentPosition(),
                                          fillColor: self.turtle.fillColor,
                                          strokeColor: self.turtle.penColor,
-                                         lineWidth: self.turtle.lineWidth)
+                                         lineWidth: self.turtle.lineWidth,
+                                         text: nil)
 
             // Iterate over prior drawings and add shapes
             for priorDrawing in self.turtle.drawings {
 
                 // Add prior drawing back to scene
-                let layer = SKShapeNode(path: priorDrawing.path.cgPath)
-//                layer.lineJoin = .round
-                layer.lineCap = .round
-                layer.lineWidth = priorDrawing.lineWidth
-                layer.fillColor = priorDrawing.fillColor
-                layer.strokeColor = priorDrawing.strokeColor
-                self.scene.addChild(layer)
+                if priorDrawing.text == nil {
+                    
+                    // No text, just render the shape
+                    let layer = SKShapeNode(path: priorDrawing.path.cgPath)
+    //                layer.lineJoin = .round
+                    layer.lineCap = .round
+                    layer.lineWidth = priorDrawing.lineWidth
+                    layer.fillColor = priorDrawing.fillColor
+                    layer.strokeColor = priorDrawing.strokeColor
+                    self.scene.addChild(layer)
+
+                } else {
+                    
+                    // Render the text
+                    let layer = SKLabelNode(fontNamed: "Helvetica Bold")
+                    layer.text = priorDrawing.text?.message
+                    layer.fontSize = priorDrawing.text?.size ?? 24.0
+                    layer.horizontalAlignmentMode = .left
+                    layer.position = priorDrawing.text?.position ?? CGPoint.zero
+                    layer.fontColor = .black
+                    self.scene.addChild(layer)
+                    
+                }
+                
             }
 
             // Restore current state of turtle
