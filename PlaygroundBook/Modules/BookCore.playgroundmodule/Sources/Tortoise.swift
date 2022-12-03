@@ -469,4 +469,26 @@ public struct Tortoise {
         
 }
 
+// Canvas-like enhancements to the Tortoise
 
+public typealias Point = CGPoint
+
+extension Tortoise {
+    
+    public mutating func drawLine(from: Point, to: Point) {
+        
+        // Pick the pen up
+        self.penUp()
+        
+        // Go to the start of the line
+        self.diagonal(dx: from.x - self.currentPosition().x, dy: from.y - self.currentPosition().y)
+        
+        // Pen down
+        self.penDown()
+        
+        // Draw the line
+        self.diagonal(dx: to.x - from.x, dy: to.y - from.y)
+        
+    }
+    
+}
