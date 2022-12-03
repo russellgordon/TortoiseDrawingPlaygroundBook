@@ -401,7 +401,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             priorDrawing.fillColor.setFill()
             // Set current stroke color in this drawing context
             priorDrawing.strokeColor.setStroke()
-            // Set end cap
+            // Set end cap and join style
             path.lineCapStyle = .round
             path.lineJoinStyle = .round
             // Now fill and stroke the path
@@ -421,6 +421,9 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         self.gridPaper.turtle.fillColor.setFill()
         // Set current stroke color in this drawing context
         self.gridPaper.turtle.penColor.setStroke()
+        // Set end cap and join style
+        path.lineCapStyle = .round
+        path.lineJoinStyle = .round
         // Now fill and stroke the path
         path.fill()
         path.stroke()
