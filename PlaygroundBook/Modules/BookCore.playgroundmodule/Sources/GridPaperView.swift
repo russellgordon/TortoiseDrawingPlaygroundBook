@@ -155,7 +155,37 @@ public class GridPaperView : UIView {
             for priorDrawing in self.turtle.drawings {
 
                 // Add prior drawing back to scene
-                if priorDrawing.text == nil {
+                if let textToRender = priorDrawing.text {
+                    
+                    // Render the text
+                    let layer = SKLabelNode()
+
+                    // Set the line spacing to 1
+                    let paragraphStyle = NSMutableParagraphStyle()
+                    paragraphStyle.lineSpacing = 1.0
+                    
+                    // set the Obliqueness (tilt of text) to 0.0
+                    let skew = 0.0
+                    
+                    // Set attributes of text
+                    let textAttributes: [NSAttributedString.Key : AnyObject] = [
+                        NSAttributedString.Key.font: UIFont(name: "Helvetica Bold", size: textToRender.size) as AnyObject,
+                        NSAttributedString.Key.paragraphStyle: paragraphStyle,
+                        NSAttributedString.Key.obliqueness: skew as AnyObject,
+                        NSAttributedString.Key.foregroundColor: UIColor.black
+                    ]
+                    
+                    // Apply the attributes to the text
+                    let formattedText = NSAttributedString(string: textToRender.message, attributes: textAttributes)
+                    layer.attributedText = formattedText
+
+                    // Set other charateristics
+                    layer.horizontalAlignmentMode = .left
+                    layer.position = textToRender.position
+                    
+                    self.scene.addChild(layer)
+
+                } else {
                     
                     // No text, just render the shape
                     let layer = SKShapeNode(path: priorDrawing.path.cgPath)
@@ -164,17 +194,6 @@ public class GridPaperView : UIView {
                     layer.lineWidth = priorDrawing.lineWidth
                     layer.fillColor = priorDrawing.fillColor
                     layer.strokeColor = priorDrawing.strokeColor
-                    self.scene.addChild(layer)
-
-                } else {
-                    
-                    // Render the text
-                    let layer = SKLabelNode(fontNamed: "Helvetica Bold")
-                    layer.text = priorDrawing.text?.message
-                    layer.fontSize = priorDrawing.text?.size ?? 24.0
-                    layer.horizontalAlignmentMode = .left
-                    layer.position = priorDrawing.text?.position ?? CGPoint.zero
-                    layer.fontColor = .black
                     self.scene.addChild(layer)
                     
                 }
