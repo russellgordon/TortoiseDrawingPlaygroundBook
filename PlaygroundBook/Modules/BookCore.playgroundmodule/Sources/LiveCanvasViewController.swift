@@ -400,6 +400,10 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             // Transform the path so it is rotated correctly
             let rotation = CGAffineTransform(rotationAngle: CGFloat.pi)
             path.apply(rotation)
+            
+            // Horizontally flip the path
+            let flip = CGAffineTransform(scaleX: -1, y: 1)
+            path.apply(flip)
 
             // Set line width of path
             path.lineWidth = priorDrawing.lineWidth
@@ -424,6 +428,10 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         let rotation = CGAffineTransform(rotationAngle: CGFloat.pi)
         path.apply(rotation)
         
+        // Horizontally flip the path
+        let flip = CGAffineTransform(scaleX: -1, y: 1)
+        path.apply(flip)
+        
         // Set line width of path
         path.lineWidth = self.gridPaper.turtle.lineWidth
         // Set current fill color in this drawing context
@@ -443,6 +451,9 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
         // Undo the rotation in the path shown on screen
         let reverseRotation = CGAffineTransform(rotationAngle: -CGFloat.pi)
         path.apply(reverseRotation)
+        
+        // Undo the horizontal flip by applying it again
+        path.apply(flip)
 
         // Save the PDF
         if let documentDirectories = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true).first {
@@ -461,6 +472,10 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
             // Undo the rotation in the path shown on screen
             let reverseRotation = CGAffineTransform(rotationAngle: -CGFloat.pi)
             path.apply(reverseRotation)
+            
+            // Horizontally flip the path
+            let flip = CGAffineTransform(scaleX: -1, y: 1)
+            path.apply(flip)
 
         }
         
