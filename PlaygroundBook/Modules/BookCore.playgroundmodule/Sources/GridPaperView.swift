@@ -172,7 +172,7 @@ public class GridPaperView : UIView {
                         NSAttributedString.Key.font: UIFont(name: "Helvetica Bold", size: textToRender.size) as AnyObject,
                         NSAttributedString.Key.paragraphStyle: paragraphStyle,
                         NSAttributedString.Key.obliqueness: skew as AnyObject,
-                        NSAttributedString.Key.foregroundColor: UIColor.black
+                        NSAttributedString.Key.foregroundColor: textToRender.color
                     ]
                     
                     // Apply the attributes to the text

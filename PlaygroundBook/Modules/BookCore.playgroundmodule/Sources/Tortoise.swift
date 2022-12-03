@@ -28,6 +28,7 @@ public struct Text {
     let position: Point
     let size: Double
     let kerning: Double
+    let color: UIColor
 }
 
 public struct Drawing {
@@ -220,7 +221,13 @@ public struct Tortoise {
          - size: The size of the text, specified in points.
          - kerning: The spacing between letters of the text. 0.0 is neutral, negative values draw letters together, positive values move letters further apart.
      */
-    public func drawText(message: String, at: Point, size: Double = 24, kerning : Double = 0.0) {
+    public func drawText(message: String, at: Point, color: UIColor = .black, size: Double = 24, kerning : Double = 0.0) {
+        
+        var red: CGFloat = 0
+        var green: CGFloat = 0
+        var blue: CGFloat = 0
+        var alpha: CGFloat = 0
+        color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
                 
         // Send command to draw text at provided position
         messageToLiveView(action: PlaygroundValue.dictionary([
@@ -229,7 +236,11 @@ public struct Tortoise {
             "atX": .floatingPoint(at.x),
             "atY": .floatingPoint(at.y),
             "size": .floatingPoint(size),
-            "kerning": .floatingPoint(kerning)
+            "kerning": .floatingPoint(kerning),
+            "red": .floatingPoint(red),
+            "green": .floatingPoint(green),
+            "blue": .floatingPoint(blue),
+            "alpha": .floatingPoint(alpha)
         ]))
 
     }

@@ -334,7 +334,11 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                    case let .floatingPoint(x)? = dictionary["atX"],
                    case let .floatingPoint(y)? = dictionary["atY"],
                    case let .floatingPoint(size)? = dictionary["size"],
-                   case let .floatingPoint(kerning)? = dictionary["kerning"] {
+                   case let .floatingPoint(kerning)? = dictionary["kerning"],
+                   case let .floatingPoint(red)? = dictionary["red"],
+                   case let .floatingPoint(green)? = dictionary["green"],
+                   case let .floatingPoint(blue)? = dictionary["blue"],
+                   case let .floatingPoint(alpha)? = dictionary["alpha"] {
                     
                     // Save the current drawing
                     let finishedDrawing = Drawing(path: gridPaper.turtle.path,
@@ -359,11 +363,15 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     // Move new path back to current position
                     gridPaper.turtle.path.move(to: currentPosition)
 
+                    // Create the color for the text
+                    let color = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    
                     // Add a drawing with the text just received
                     let textToRender = Text(message: message,
                                             position: Point(x: x, y: y),
                                             size: size,
-                                            kerning: kerning)
+                                            kerning: kerning,
+                                            color: color)
                     
                     // Save the drawing that contains this text to render
                     let drawingWithText = Drawing(path: gridPaper.turtle.path,
@@ -467,7 +475,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     NSAttributedString.Key.font: UIFont(name: "Helvetica Bold", size: textToRender.size) as AnyObject,
                     NSAttributedString.Key.paragraphStyle: paragraphStyle,
                     NSAttributedString.Key.obliqueness: skew as AnyObject,
-                    NSAttributedString.Key.foregroundColor: UIColor.black
+                    NSAttributedString.Key.foregroundColor: textToRender.color
                 ]
                 
                 // Apply the attributes to the text
