@@ -441,6 +441,52 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                 } else {
                     reply("'drawRoundedRectangle' command received, but some required information was missing.")
                 }
+
+            case "drawRectangle":
+                if case let .floatingPoint(x)? = dictionary["atX"],
+                   case let .floatingPoint(y)? = dictionary["atY"],
+                   case let .floatingPoint(width)? = dictionary["width"],
+                   case let .floatingPoint(height)? = dictionary["height"],
+                   case let .boolean(anchoredAtBottomLeft)? = dictionary["anchoredAtBottomLeft"] {
+                    
+                    // Save the current drawing
+                    let finishedDrawing = Drawing(path: gridPaper.turtle.path,
+                                                  position: gridPaper.turtle.position,
+                                                  fillColor: gridPaper.turtle.fillColor,
+                                                  strokeColor: gridPaper.turtle.penColor,
+                                                  lineWidth: gridPaper.turtle.lineWidth,
+                                                  text: nil)
+
+                    // Add to list of finished drawings
+                    gridPaper.turtle.drawings.append(finishedDrawing)
+                    
+                    // Confirm that current drawing attributes were saved
+                    reply("** BEFORE DRAWING RECTANGLE ** Turtle just saved is: \(dump(finishedDrawing))")
+                    
+                    // Save the current position before clearing path (position is a property of the path)
+                    let currentPosition = gridPaper.turtle.currentPosition()
+
+                    // Clear the current path
+                    gridPaper.turtle.path = UIBezierPath()
+                    
+                    // Move new path back to current position
+                    gridPaper.turtle.path.move(to: currentPosition)
+                    
+                    // Confirm command received
+                    reply("'drawRectangle' command received, just about to draw it...")
+                    
+                    // Draw the rectangle in the turtle that's part of the live view...
+                    gridPaper.turtle.drawRectangle(at: Point(x: x, y: y),
+                                                          width: width,
+                                                          height: height,
+                                                          anchoredBy: anchoredAtBottomLeft == true ? AnchorPosition.bottomLeft : AnchorPosition.centre)
+                    
+                    // Report state of just saved turtle
+                    reply("** AFTER DRAWING RECTANGLE ** Current turtle state is, path: \(gridPaper.turtle.path)\nposition: \(gridPaper.turtle.position)\n fillColor: \(gridPaper.turtle.fillColor)\n strokeColor:\(gridPaper.turtle.penColor)\nlineWidth: \(gridPaper.turtle.lineWidth)")
+                    
+                } else {
+                    reply("'drawRectangle' command received, but some required information was missing.")
+                }
                 
             case "drawAxes":
                 if

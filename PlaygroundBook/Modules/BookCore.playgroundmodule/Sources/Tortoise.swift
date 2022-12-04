@@ -250,6 +250,50 @@ public struct Tortoise {
         ]))
 
     }
+
+    /**
+     Draw a rectangle at the specified point and anchor position.
+          
+     - Parameters:
+        - at: Point at which the rectangle will be drawn.
+        - width: How wide the rectangle will be across its horizontal axis.
+        - height: How tall the rectangle will be across its vertical axis.
+        - anchoredBy: Draw the rectangle from a point at the rectangle's bottom left corner, or, the rectangle's centre.
+     */
+    public func drawRectangle(at: Point,
+                              width: Double,
+                              height: Double,
+                              anchoredBy : AnchorPosition = AnchorPosition.bottomLeft) {
+        
+        // Set anchor co-ordinate
+        var bottomLeftX = at.x
+        var bottomLeftY = at.y
+
+        // Adjust when anchored at centre point
+        if anchoredBy == .centre {
+            bottomLeftX = at.x - width / 2
+            bottomLeftY = at.y - height / 2
+        }
+        
+        // Create the rectangle
+        let rectangle = UIBezierPath(rect: CGRect(x: bottomLeftX,
+                                                  y: bottomLeftY,
+                                                  width: width,
+                                                  height: height))
+        
+        // Add to the existing path
+        path.append(rectangle)
+
+        // Send command to draw rectangle at provided position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("drawRectangle"),
+            "atX": .floatingPoint(at.x),
+            "atY": .floatingPoint(at.y),
+            "width": .floatingPoint(width),
+            "height": .floatingPoint(height),
+            "anchoredAtBottomLeft": .boolean(anchoredBy == .bottomLeft ? true : false)
+        ]))
+    }
     
     /**
      Draw a rounded rectangle at the specified point and anchor position.
@@ -300,7 +344,6 @@ public struct Tortoise {
             "cornerRadius": .floatingPoint(cornerRadius),
             "anchoredAtBottomLeft": .boolean(anchoredBy == .bottomLeft ? true : false)
         ]))
-
         
     }
     
