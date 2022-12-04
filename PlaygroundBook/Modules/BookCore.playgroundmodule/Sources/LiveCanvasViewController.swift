@@ -531,7 +531,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
 
         // SEE: https://www.hackingwithswift.com/example-code/uikit/how-to-render-pdfs-using-uigraphicspdfrenderer
         // ... for notes on pages sizes
-        let scaleFactor = 2
+        let scaleFactor = 1.6
         let pageRect = CGRect(origin: CGPoint(x: -306 * scaleFactor, y: 396 * scaleFactor), size: CGSize(width: 612 * scaleFactor, height: 792 * scaleFactor))
         
         // Begin drawing the PDF
