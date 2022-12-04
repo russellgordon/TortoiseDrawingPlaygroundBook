@@ -322,12 +322,15 @@ public struct Tortoise {
         var alpha: CGFloat = 0
         color.getRed(&red, green: &green, blue: &blue, alpha: &alpha)
         
+        // Save current position
+        let originalPosition = self.position
+        
         // Save current canvas line width
-        let currentLineWidth = self.lineWidth
+        let originalLineWidth = self.lineWidth
         self.lineWidth = 1
         
-        // Save current canvas line color
-        let currentLineColor = self.penColor
+        // Save current turtle pen color
+        let originalPenColor = self.penColor
                 
         // Change to color provided by user
         self.penColor = UIColor(red: red, green: green, blue: blue, alpha: alpha / 2)
@@ -403,9 +406,16 @@ public struct Tortoise {
 
         }
         
-        // Restore text, line color, and width
-        self.penColor = currentLineColor
-        self.lineWidth = currentLineWidth
+        // Restore pen color and width
+        self.penColor = originalPenColor
+        self.lineWidth = originalLineWidth
+
+        // Restore turtle to position it was in before grid was drawn
+        self.penUp()
+        self.diagonal(dx: originalPosition.x - self.currentPosition().x,
+                      dy: originalPosition.y - self.currentPosition().y)
+        self.penDown()
+        
         
         // Send command to draw axes at provided position
         messageToLiveView(action: PlaygroundValue.dictionary([
