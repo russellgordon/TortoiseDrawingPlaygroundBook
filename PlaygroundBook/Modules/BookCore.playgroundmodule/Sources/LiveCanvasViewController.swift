@@ -532,6 +532,31 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     reply("'drawEllipse' command received, but some required information was missing.")
                 }
                 
+            case "drawArc":
+                if case let .floatingPoint(centerX)? = dictionary["centerX"],
+                   case let .floatingPoint(centerY)? = dictionary["centerY"],
+                   case let .floatingPoint(radius)? = dictionary["radius"],
+                   case let .floatingPoint(startAngle)? = dictionary["startAngle"],
+                   case let .floatingPoint(endAngle)? = dictionary["endAngle"],
+                   case let .boolean(clockwise)? = dictionary["clockwise"] {
+                                        
+                    // Confirm command received
+                    reply("'drawArc' command received, just about to draw it...")
+                    
+                    // Draw the ellipse in the turtle that's part of the live view...
+                    gridPaper.turtle.drawArc(withCenter: Point(x: centerX, y: centerY),
+                                             radius: radius,
+                                             startAngle: startAngle,
+                                             endAngle: endAngle,
+                                             clockwise: clockwise)
+                    
+                    // Report state of just saved turtle
+                    reply("** AFTER DRAWING ARC ** Current turtle state is, path: \(gridPaper.turtle.path)\nposition: \(gridPaper.turtle.position)\n fillColor: \(gridPaper.turtle.fillColor)\n strokeColor:\(gridPaper.turtle.penColor)\nlineWidth: \(gridPaper.turtle.lineWidth)")
+                    
+                } else {
+                    reply("'drawArc' command received, but some required information was missing.")
+                }
+                
             case "drawAxes":
                 if
 //                    case let .boolean(withScale)? = dictionary["withScale"],

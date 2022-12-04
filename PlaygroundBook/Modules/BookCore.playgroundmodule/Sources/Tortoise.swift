@@ -252,6 +252,45 @@ public struct Tortoise {
     }
     
     /**
+     Draw an arc based upon the specified center point.
+     
+     - Parameters:
+     - withCenter: The center point of the circle used to define the arc.
+     - radius: The radius of the circle used to define the arc.
+     - startAngle: Starting angle of the arc, measured in degrees counterclockwise from the x-axis.
+     - endAngle: Ending angle of the arc, measured in degrees counterclockwise from the x-axis.
+     - clockwise: Whether to draw the arc instead in a clockwise direction; default is false.
+     */
+    public mutating func drawArc(withCenter center: Point,
+                    radius: Double,
+                    startAngle: Degrees,
+                    endAngle: Degrees,
+                    clockwise: Bool = false) {
+        
+        // Define the arc
+        let arc = UIBezierPath(arcCenter: center,
+                               radius: radius,
+                               startAngle: startAngle.asRadians(),
+                               endAngle: endAngle.asRadians(),
+                               clockwise: !clockwise)
+        
+        // Add to the existing path
+        path.append(arc)
+
+        // Send command to draw arc at given position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("drawArc"),
+            "centerX": .floatingPoint(center.x),
+            "centerY": .floatingPoint(center.y),
+            "radius": .floatingPoint(radius),
+            "startAngle": .floatingPoint(startAngle),
+            "endAngle": .floatingPoint(endAngle),
+            "clockwise": .boolean(clockwise)
+        ]))
+        
+    }
+    
+    /**
      Draw a bezier curve between the provided points.
      
      - Parameters:
@@ -787,7 +826,7 @@ public struct Tortoise {
          - radius: The radius of the circle, if the angle for this arc were a full 360 degrees.
          - angle: How large of an arc to make; 90 degrees is a quarter-circle, 180 is a half-circle, 360 is a full circle, and so on.
      */
-    public mutating func arc(radius: Double, angle: Double){
+    public mutating func arc(radius: Double, angle: Double) {
         self.addArc(radius: radius, angle: angle)
     }
     
