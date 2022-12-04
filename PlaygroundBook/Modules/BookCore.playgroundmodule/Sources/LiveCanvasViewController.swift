@@ -580,6 +580,50 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     reply("'drawingAxes' command received, but some required information was missing.")
                 }
 
+            case "drawCurve":
+                if case let .floatingPoint(fromX)? = dictionary["fromX"],
+                   case let .floatingPoint(fromY)? = dictionary["fromY"],
+                   case let .floatingPoint(toX)? = dictionary["toX"],
+                   case let .floatingPoint(toY)? = dictionary["toY"],
+                   case let .floatingPoint(control1X)? = dictionary["control1X"],
+                   case let .floatingPoint(control1Y)? = dictionary["control1Y"],
+                   case let .floatingPoint(control2X)? = dictionary["control2X"],
+                   case let .floatingPoint(control2Y)? = dictionary["control2Y"],
+                   case let .boolean(showControlPoints)? = dictionary["showControlPoints"] {
+                    
+                    // Save the current drawing
+                    let finishedDrawing = Drawing(path: gridPaper.turtle.path,
+                                                  position: gridPaper.turtle.position,
+                                                  fillColor: gridPaper.turtle.fillColor,
+                                                  strokeColor: gridPaper.turtle.penColor,
+                                                  lineWidth: gridPaper.turtle.lineWidth,
+                                                  text: nil)
+
+                    // Add to list of finished drawings
+                    gridPaper.turtle.drawings.append(finishedDrawing)
+
+                    // Save the current position before clearing path (position is a property of the path)
+                    let currentPosition = gridPaper.turtle.currentPosition()
+
+                    // Clear the current path
+                    gridPaper.turtle.path = UIBezierPath()
+                    
+                    // Move new path back to current position
+                    gridPaper.turtle.path.move(to: currentPosition)
+
+                    reply("Before drawing bezier curve...")
+                    
+                    gridPaper.turtle.drawCurve(from: Point(x: fromX, y: fromY),
+                                               to: Point(x: toX, y: toY),
+                                               control1: Point(x: control1X, y: control1Y),
+                                               control2: Point(x: control2X, y: control2Y),
+                                               showControlPoints: showControlPoints)
+                    
+                    reply("After drawing bezier curve...")
+                    
+                } else {
+                    reply("'drawCurve' command received, but some required information was missing.")
+                }
                 
             case "whenSettingFill":
                 if case let .floatingPoint(red)? = dictionary["red"],

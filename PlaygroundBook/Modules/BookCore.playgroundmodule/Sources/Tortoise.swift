@@ -252,6 +252,98 @@ public struct Tortoise {
     }
     
     /**
+     Draw a bezier curve between the provided points.
+     
+     - Parameters:
+     - from: Starting position of the curve
+     - to: Ending position of the curve
+     - showControlPoints: Optionally display the co-ordinates of key points and the "handles" for the curve.
+     
+     */
+    public mutating func drawCurve(from: Point,
+                          to: Point,
+                          control1: Point,
+                          control2: Point,
+                          showControlPoints: Bool = false) {
+        
+        // Start a new path
+        let curve = UIBezierPath()
+        
+        // Move to start of curve
+        curve.move(to: from)
+        
+        // Draw the co-ordinates and "handles" of the curve
+        // NOTE: If we also show the control points when running
+        //       this code in the receiver then they get drawn in the wrong color.
+        //       Something to investigate there but for now the workaround is to draw
+        //       the control points once, from the sender (the turtle that is not in the live view)
+        if showControlPoints && role == .sender {
+            
+            // From
+            self.drawText(message: "(\(from.x), \(from.y))",
+                          at: Point(x: from.x - 30, y: from.y + 5), size: 10)
+            
+            // To
+            self.drawText(message: "(\(to.x), \(to.y))",
+                          at: Point(x: to.x - 30, y: to.y + 5), size: 10)
+            
+            // Control 1
+            self.drawText(message: "(\(control1.x), \(control1.y))",
+                          at: Point(x: control1.x - 30, y: control1.y + 5), size: 10)
+            
+            // Control 2
+            self.drawText(message: "(\(control2.x), \(control2.y))",
+                          at: Point(x: control2.x - 30, y: control2.y + 5), size: 10)
+            
+            // Save current line width and pen color
+            let originalLineWidth = self.lineWidth
+            
+            // Save current turtle pen color
+            let originalPenColor = self.penColor
+
+            // Set new line width and pen color for drawing handles
+            self.lineWidth = 1
+            self.penColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.75)
+            
+            // First handle
+            self.drawLine(from: Point(x: control1.x, y: control1.y),
+                          to: Point(x: from.x, y: from.y))
+            
+            // Second handle
+            self.drawLine(from: Point(x: to.x, y: to.y),
+                          to: Point(x: control2.x, y: control2.y))
+            
+            // Return to original line width and color
+            self.lineWidth = originalLineWidth
+            self.penColor = originalPenColor
+            
+        }
+        
+        // Actually draw the curve
+        curve.addCurve(to: CGPoint(x: to.x, y: to.y),
+                       controlPoint1: control1,
+                       controlPoint2: control2)
+        
+        // Append curve to existing path
+        path.append(curve)
+        
+        // Send command to draw axes at provided position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("drawCurve"),
+            "fromX": .floatingPoint(from.x),
+            "fromY": .floatingPoint(from.y),
+            "toX": .floatingPoint(to.x),
+            "toY": .floatingPoint(to.y),
+            "control1X": .floatingPoint(control1.x),
+            "control1Y": .floatingPoint(control1.y),
+            "control2X": .floatingPoint(control2.x),
+            "control2Y": .floatingPoint(control2.y),
+            "showControlPoints": .boolean(showControlPoints),
+        ]))
+        
+    }
+    
+    /**
      Draw an ellipse centred at the point specified.
      
      - Parameters:
