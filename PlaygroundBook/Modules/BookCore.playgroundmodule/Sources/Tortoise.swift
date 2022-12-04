@@ -23,6 +23,12 @@ public enum Role {
     case receiver
 }
 
+/// Used to specify how rectangles should be anchored
+public enum AnchorPosition : Int {
+    case bottomLeft  = 1
+    case centre = 2
+}
+
 public struct Text {
     let message: String
     let position: Point
@@ -243,6 +249,59 @@ public struct Tortoise {
             "alpha": .floatingPoint(alpha)
         ]))
 
+    }
+    
+    /**
+     Draw a rounded rectangle at the specified point and anchor position.
+     
+     A `cornerRadius` of 25 each means that the last 25 points of a typical rectangle's corner will be replaced with the rounded edge of a circle with a radius of 25 points.
+     
+     - Parameters:
+        - at: Point at which the rectangle will be drawn.
+        - width: How wide the rectangle will be across its horizontal axis.
+        - height: How tall the rectangle will be across its vertical axis.
+        - cornerRadius: Size of the rounded corner.
+        - anchoredBy: Draw the rectangle from a point at the rectangle's bottom left corner, or, the rectangle's centre.
+     */
+    public func drawRoundedRectangle(at: Point,
+                                     width: Double,
+                                     height: Double,
+                                     cornerRadius: Double = 10,
+                                     anchoredBy : AnchorPosition = AnchorPosition.bottomLeft) {
+     
+
+        // Set anchor co-ordinate
+        var bottomLeftX = at.x
+        var bottomLeftY = at.y
+
+        // Adjust when anchored at centre point
+        if anchoredBy == .centre {
+            bottomLeftX = at.x - width / 2
+            bottomLeftY = at.y - height / 2
+        }
+        
+        // Create the rounded rectangle
+        let roundedRectangle = UIBezierPath(roundedRect: CGRect(x: bottomLeftX,
+                                                                y: bottomLeftY,
+                                                                width: width,
+                                                                height: height),
+                                            cornerRadius: cornerRadius)
+        
+        // Add to the existing path
+        path.append(roundedRectangle)
+
+        // Send command to draw rounded rectangle at provided position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("drawRoundedRectangle"),
+            "atX": .floatingPoint(at.x),
+            "atY": .floatingPoint(at.y),
+            "width": .floatingPoint(width),
+            "height": .floatingPoint(height),
+            "cornerRadius": .floatingPoint(cornerRadius),
+            "anchoredAtBottomLeft": .boolean(anchoredBy == .bottomLeft ? true : false)
+        ]))
+
+        
     }
     
     /**
