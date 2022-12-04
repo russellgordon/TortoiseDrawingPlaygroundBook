@@ -246,13 +246,14 @@ public struct Tortoise {
     }
     
     /**
-     Draw some text at the given position.
+     Draws horizontal and vertical axes on the canvas.
           
      - Parameters:
-         - message: The text to be drawn on screen.
-         - at: Text will be drawn starting at this location.
-         - size: The size of the text, specified in points.
-         - kerning: The spacing between letters of the text. 0.0 is neutral, negative values draw letters together, positive values move letters further apart.
+         - withScale: Whether to show grid lines and a scale.
+         - by: How frequently to mark the change in scale.
+         - width: The width of the first quadrant.
+         - height: The height of the first quadrant.
+         - color: The color to draw the axes with.
      */
     public mutating func drawAxes(withScale: Bool = false, by: Int = 50, width: Int, height: Int, color: UIColor) {
         
