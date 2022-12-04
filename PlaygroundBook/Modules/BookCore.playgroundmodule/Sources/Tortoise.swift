@@ -250,6 +250,38 @@ public struct Tortoise {
         ]))
 
     }
+    
+    /**
+     Draw an ellipse centred at the point specified.
+     
+     - Parameters:
+         - at: Point over which the ellipse will be drawn.
+         - width: How wide the ellipse will be across its horizontal axis.
+         - height: How tall the ellipse will be across its vertical axis.
+     */
+    public func drawEllipse(at: Point,
+                              width: Double,
+                            height: Double) {
+                
+        // Create the ellipse
+        let ellipse = UIBezierPath(ovalIn: CGRect(x: at.x - width / 2,
+                                                  y: at.y - height / 2,
+                                                  width: width,
+                                                  height: height))
+        
+        // Add to the existing path
+        path.append(ellipse)
+
+        // Send command to draw rectangle at provided position
+        messageToLiveView(action: PlaygroundValue.dictionary([
+            "Command": .string("drawEllipse"),
+            "atX": .floatingPoint(at.x),
+            "atY": .floatingPoint(at.y),
+            "width": .floatingPoint(width),
+            "height": .floatingPoint(height)
+        ]))
+    }
+    
 
     /**
      Draw a rectangle at the specified point and anchor position.
