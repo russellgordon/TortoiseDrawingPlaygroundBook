@@ -443,14 +443,15 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                 }
                 
             case "drawAxes":
-                if case let .boolean(withScale)? = dictionary["withScale"],
-                   case let .integer(by)? = dictionary["by"],
-                   case let .integer(width)? = dictionary["width"],
-                   case let .integer(height)? = dictionary["height"],
-                   case let .floatingPoint(red)? = dictionary["red"],
-                   case let .floatingPoint(green)? = dictionary["green"],
-                   case let .floatingPoint(blue)? = dictionary["blue"],
-                   case let .floatingPoint(alpha)? = dictionary["alpha"] {
+                if
+//                    case let .boolean(withScale)? = dictionary["withScale"],
+//                    case let .integer(by)? = dictionary["by"],
+//                    case let .integer(width)? = dictionary["width"],
+//                    case let .integer(height)? = dictionary["height"],
+                    case let .floatingPoint(red)? = dictionary["red"],
+                    case let .floatingPoint(green)? = dictionary["green"],
+                    case let .floatingPoint(blue)? = dictionary["blue"],
+                    case let .floatingPoint(alpha)? = dictionary["alpha"] {
                     
                     // Save the current drawing
                     let finishedDrawing = Drawing(path: gridPaper.turtle.path,
@@ -473,8 +474,9 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                     gridPaper.turtle.path.move(to: currentPosition)
 
                     // Create the color for the text
-                    let color = UIColor(red: red, green: green, blue: blue, alpha: alpha)
-                    
+//                    let color = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+                    let _ = UIColor(red: red, green: green, blue: blue, alpha: alpha)
+
                     reply("Before drawing axes...")
                     // NOTE: Need to dig into WHY we don't need to call drawAxes again here
                     //       If we don't need to do it with this method, do we need to do it anywhere? 😬
