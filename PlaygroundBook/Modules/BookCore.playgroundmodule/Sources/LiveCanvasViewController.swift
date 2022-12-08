@@ -739,7 +739,7 @@ extension LiveCanvasViewController: PlaygroundLiveViewMessageHandler {
                 let formattedText = NSAttributedString(string: textToRender.message, attributes: textAttributes)
                 
                 // Draw in the current context
-                let translatedPosition = CGPoint(x: textToRender.position.x - textToRender.size * 0.08,
+                let translatedPosition = CGPoint(x: textToRender.position.x - textToRender.size * 0.065,
                                                  y: textToRender.position.y * -1 - textToRender.size * 0.97)
                 formattedText.draw(at: translatedPosition)
                 
