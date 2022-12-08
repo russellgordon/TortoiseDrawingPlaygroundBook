@@ -15,6 +15,7 @@ if let proxy = page.liveView as? PlaygroundRemoteLiveViewProxy {
 
 // Ensure autocomplete keeps arguments of type point expanded as Point, not CGPoint
 typealias Point = CGPoint
+typealias Color = UIColor
 
 //#-end-hidden-code
 /*:

@@ -907,6 +907,7 @@ public struct Tortoise {
 // Canvas-like enhancements to the Tortoise
 
 public typealias Point = CGPoint
+public typealias Color = UIColor
 
 extension Tortoise {
     
