@@ -557,8 +557,8 @@ public struct Tortoise {
         let verticalEnd = verticalStart * -1
 
         // Draw labels, opaque
-        self.drawText(message: "x", at: Point(x: horizontalEnd * by - 10, y: -15), size: 12)
-        self.drawText(message: "y", at: Point(x: 5, y: verticalEnd * by - 20), size: 12)
+        self.drawText(message: "x", at: Point(x: horizontalEnd * by - 10, y: -15), color: color, size: 12)
+        self.drawText(message: "y", at: Point(x: 5, y: verticalEnd * by - 20), color: color, size: 12)
 
         // Draw scale if requested, opaque
         self.lineWidth = 1
@@ -588,7 +588,7 @@ public struct Tortoise {
                     } else if x >= 100 && x < 1000 {
                         offset = -9
                     }
-                    self.drawText(message: "\(x)", at: Point(x: x + offset, y: 5), size: 10)
+                    self.drawText(message: "\(x)", at: Point(x: x + offset, y: 5), color: color, size: 10)
                 }
                 
                 // Grid
@@ -601,7 +601,7 @@ public struct Tortoise {
                 
                 // Scale
                 if y != 0 && y != verticalEnd * by && y.quotientAndRemainder(dividingBy: labellingStep).remainder == 0 {
-                    self.drawText(message: "\(y)", at: Point(x: 5, y: y - 7), size: 10)
+                    self.drawText(message: "\(y)", at: Point(x: 5, y: y - 7), color: color,  size: 10)
                 }
                 
                 // Grid
